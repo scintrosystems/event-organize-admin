@@ -32,7 +32,7 @@
 <body
     class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen transition-colors duration-200 overflow-x-hidden">
 
-    <!-- Top Header (No Reset Button) -->
+    <!-- Top Header -->
     <header class="sticky top-0 z-40 bg-amber-600 dark:bg-slate-800 text-white shadow-md">
         <div class="w-full max-w-7xl mx-auto px-2.5 sm:px-6 py-2 flex items-center justify-between gap-2">
             <div class="flex items-center space-x-2 min-w-0">
@@ -119,7 +119,7 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs & Toolbar (Separated Rooms, Vehicles & Contacts) -->
+        <!-- Navigation Tabs & Toolbar -->
         <div class="glass-card p-2.5 sm:p-3 rounded-xl border space-y-2.5 shadow-sm">
             <div
                 class="flex space-x-1 sm:space-x-1.5 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200 dark:border-slate-700">
@@ -189,7 +189,9 @@
             </div>
         </div>
 
-        <!-- 0. DAY-BY-DAY MASTER OVERVIEW SECTION -->
+        <!-- ========================================================================= -->
+        <!-- 0. DAY-BY-DAY MASTER OVERVIEW (WITH SEPARATED ROOMS & VEHICLES)           -->
+        <!-- ========================================================================= -->
         <section id="sec-dayview" class="hidden space-y-3">
             <div
                 class="glass-card p-2.5 sm:p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm bg-gradient-to-r from-amber-500/10 to-transparent">
@@ -200,8 +202,8 @@
                         <span>Daily Master View: <span id="dayviewCurrentLabel" class="text-amber-600 underline">Nov
                                 20</span></span>
                     </h2>
-                    <p class="text-[10px] text-slate-500">Live agenda, Appans Hotel meals, to-dos & transit for this day
-                    </p>
+                    <p class="text-[10px] text-slate-500">Live agenda, Appans Hotel meals, lodging, vehicles & to-dos
+                        for this day</p>
                 </div>
                 <div class="flex items-center gap-1 overflow-x-auto pb-0.5">
                     <button onclick="filterByDay('Nov 19')"
@@ -219,11 +221,14 @@
                 </div>
             </div>
 
-            <!-- 4 Grid Blocks -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <!-- 5 Dedicated Blocks for Master Day View -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <!-- 1. Event Agenda -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Event Agenda</h3>
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1">
+                            <i class="fa-solid fa-om text-amber-600"></i> Event Agenda
+                        </h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
                             id="dayviewScheduleCount">0 Events</span>
                     </div>
@@ -232,9 +237,12 @@
                     </div>
                 </div>
 
+                <!-- 2. Food & Catering (Appans Hotel) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Food (Appans Hotel)</h3>
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1">
+                            <i class="fa-solid fa-utensils text-amber-600"></i> Food (Appans Hotel)
+                        </h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
                             id="dayviewFoodCount">0 Meals</span>
                     </div>
@@ -243,9 +251,40 @@
                     </div>
                 </div>
 
+                <!-- 3. Rooms & Lodging (SEPARATED!) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-blue-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1">
+                            <i class="fa-solid fa-hotel text-blue-600"></i> Rooms & Lodging
+                        </h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-200 text-blue-900"
+                            id="dayviewRoomsCount">0 Rooms</span>
+                    </div>
+                    <div id="dayviewRoomsContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+
+                <!-- 4. Vehicles & Drivers (SEPARATED!) -->
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-emerald-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1">
+                            <i class="fa-solid fa-taxi text-emerald-600"></i> Vehicles & Drivers
+                        </h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-900"
+                            id="dayviewVehiclesCount">0 Vehicles</span>
+                    </div>
+                    <div id="dayviewVehiclesContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+
+                <!-- 5. To-Do Tasks (Spans 2 columns on larger screens) -->
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm md:col-span-2">
                     <div class="p-2.5 bg-rose-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-rose-900 dark:text-rose-300">To-Do Tasks</h3>
+                        <h3 class="text-xs font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1">
+                            <i class="fa-solid fa-clipboard-check text-rose-600"></i> To-Do Tasks For This Day
+                        </h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-200 text-rose-900"
                             id="dayviewTodoCount">0 Tasks</span>
                     </div>
@@ -253,21 +292,10 @@
                         class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
                     </div>
                 </div>
-
-                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
-                    <div class="p-2.5 bg-blue-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300">Rooms & Vehicles</h3>
-                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-200 text-blue-900"
-                            id="dayviewLogisticsCount">Active</span>
-                    </div>
-                    <div id="dayviewLogisticsContainer"
-                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- 1. Event Agenda Section (Removed "Ritual") -->
+        <!-- 1. Event Agenda Section -->
         <section id="sec-schedule" class="space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
@@ -421,7 +449,7 @@
             </div>
         </section>
 
-        <!-- 7. NEW: MASTER CONTACT LIST DIRECTORY TAB -->
+        <!-- 7. MASTER CONTACT DIRECTORY TAB -->
         <section id="sec-contacts" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-emerald-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
@@ -430,8 +458,8 @@
                             class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                             <i class="fa-solid fa-address-book text-emerald-600"></i> Master Contact Directory
                         </h2>
-                        <p class="text-[10px] text-slate-500">Every hotel, driver, caterer, priest & family contact
-                            across the tracker</p>
+                        <p class="text-[10px] text-slate-500">Every hotel, driver, caterer, priest & coordinator with
+                            tap-to-call</p>
                     </div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900"
                         id="contactDirectoryCount">0 Contacts</span>
@@ -455,7 +483,7 @@
 
     </main>
 
-    <!-- Modal Form (With Separated Rooms & Vehicles Options) -->
+    <!-- Modal Form -->
     <div id="recordModal"
         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2.5">
         <div

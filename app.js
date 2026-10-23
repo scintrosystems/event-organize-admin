@@ -597,7 +597,7 @@ function renderDayOverview() {
     const day = currentDayFilter;
     const filterFn = item => day === 'all' || (item.date && item.date.includes(day)) || (item.time && item.time.includes(day));
 
-    // Rituals/Events
+    // 1. Event Agenda
     const dayS = scheduleData.filter(filterFn);
     const sContainer = document.getElementById('dayviewScheduleContainer');
     const sCount = document.getElementById('dayviewScheduleCount');
@@ -615,26 +615,64 @@ function renderDayOverview() {
             `).join('');
     }
 
-    // Food
+    // 2. Food (Appans Hotel)
     const dayF = foodData.filter(i => day === 'all' || (i.date && i.date.includes(day)));
     const fContainer = document.getElementById('dayviewFoodContainer');
     const fCount = document.getElementById('dayviewFoodCount');
     if (fCount) fCount.innerText = `${dayF.length} Meals`;
     if (fContainer) {
         fContainer.innerHTML = dayF.length === 0 ? `<p class="text-xs text-slate-400 py-2">No meals logged for this day.</p>` :
-            dayF.map(r => `
+            dayF.map(r => {
+                const mealDisplay = r.mealType && r.time && r.mealType !== r.time ? `${r.mealType} (${r.time})` : (r.mealType || r.time);
+                return `
                 <div class="py-1.5 flex items-start justify-between gap-1">
                     <div>
-                        <span class="text-xs font-bold text-amber-600 block">${r.mealType} (${r.time})</span>
+                        <span class="text-xs font-bold text-amber-600 block">${mealDisplay}</span>
                         <span class="text-[10px] text-slate-700 dark:text-slate-300 font-medium block">${r.menu || 'Menu TBD'}</span>
                         <span class="text-[9px] text-slate-400">${r.caterer} • ${r.headcount}</span>
                     </div>
                     <div>${getStatusBadge(r.status, r.id, 'food')}</div>
                 </div>
+            `}).join('');
+    }
+
+    // 3. Rooms & Lodging (SEPARATED!)
+    const rmContainer = document.getElementById('dayviewRoomsContainer');
+    const rmCount = document.getElementById('dayviewRoomsCount');
+    if (rmCount) rmCount.innerText = `${roomsData.length} Bookings`;
+    if (rmContainer) {
+        rmContainer.innerHTML = roomsData.length === 0 ? `<p class="text-xs text-slate-400 py-2">No rooms booked.</p>` :
+            roomsData.map(r => `
+                <div class="py-1.5 flex items-start justify-between gap-1">
+                    <div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block">${r.name}</span>
+                        <span class="text-[10px] text-blue-600 font-semibold block">${highlightPhoneNumbers(r.phone)} • ${r.location}</span>
+                        <span class="text-[9px] text-slate-400 block">${r.timing}</span>
+                    </div>
+                    <div>${getStatusBadge(r.status, r.id, 'rooms')}</div>
+                </div>
             `).join('');
     }
 
-    // To-Do
+    // 4. Vehicles & Drivers (SEPARATED!)
+    const vhContainer = document.getElementById('dayviewVehiclesContainer');
+    const vhCount = document.getElementById('dayviewVehiclesCount');
+    if (vhCount) vhCount.innerText = `${vehiclesData.length} Vehicles`;
+    if (vhContainer) {
+        vhContainer.innerHTML = vehiclesData.length === 0 ? `<p class="text-xs text-slate-400 py-2">No vehicles booked.</p>` :
+            vehiclesData.map(v => `
+                <div class="py-1.5 flex items-start justify-between gap-1">
+                    <div>
+                        <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block">${v.name}</span>
+                        <span class="text-[10px] text-emerald-600 font-semibold block">${highlightPhoneNumbers(v.phone)} • ${v.rate}</span>
+                        <span class="text-[9px] text-slate-400 block">${v.timing}</span>
+                    </div>
+                    <div>${getStatusBadge(v.status, v.id, 'vehicles')}</div>
+                </div>
+            `).join('');
+    }
+
+    // 5. To-Do
     const dayT = todoData.filter(filterFn);
     const tContainer = document.getElementById('dayviewTodoContainer');
     const tCount = document.getElementById('dayviewTodoCount');
@@ -650,15 +688,6 @@ function renderDayOverview() {
                     <div>${getStatusBadge(r.status, r.id, 'todo')}</div>
                 </div>
             `).join('');
-    }
-
-    // Rooms & Vehicles combined summary in Dayview
-    const lContainer = document.getElementById('dayviewLogisticsContainer');
-    if (lContainer) {
-        lContainer.innerHTML = `
-            ${roomsData.map(r => `<div class="py-1 flex items-center justify-between text-xs"><div><span class="font-bold">${r.name}</span><span class="text-[10px] text-slate-500 block">${highlightPhoneNumbers(r.phone)} • ${r.location}</span></div><div>${getStatusBadge(r.status, r.id, 'rooms')}</div></div>`).join('')}
-            ${vehiclesData.map(v => `<div class="py-1 flex items-center justify-between text-xs border-t"><div><span class="font-bold">${v.name}</span><span class="text-[10px] text-slate-500 block">${highlightPhoneNumbers(v.phone)} • ${v.rate}</span></div><div>${getStatusBadge(v.status, v.id, 'vehicles')}</div></div>`).join('')}
-        `;
     }
 }
 
