@@ -32,19 +32,18 @@
 <body
     class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen transition-colors duration-200 overflow-x-hidden">
 
-    <!-- Strict 320px Mobile-Ready Header -->
+    <!-- Top Header (No Reset Button) -->
     <header class="sticky top-0 z-40 bg-amber-600 dark:bg-slate-800 text-white shadow-md">
-        <div class="w-full max-w-7xl mx-auto px-2.5 sm:px-6 py-2 flex items-center justify-between gap-1.5">
-            <!-- Left Branding -->
-            <div class="flex items-center space-x-1.5 min-w-0">
+        <div class="w-full max-w-7xl mx-auto px-2.5 sm:px-6 py-2 flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-2 min-w-0">
                 <i class="fa-solid fa-house-chimney text-amber-200 text-base sm:text-lg shrink-0"></i>
                 <div class="min-w-0">
                     <h1 class="text-xs sm:text-base font-bold tracking-tight truncate leading-tight">Griha Pravesam
                         Tracker</h1>
-                    <div class="flex items-center gap-1 text-[9px] sm:text-xs text-amber-100">
+                    <div class="flex items-center gap-1.5 text-[9px] sm:text-xs text-amber-100 mt-0.5">
                         <span class="whitespace-nowrap">Nov 19–21</span>
                         <span
-                            class="inline-flex items-center gap-1 font-semibold px-1.5 py-0.2 rounded-full bg-amber-700/90 text-[9px]"
+                            class="inline-flex items-center gap-1 font-semibold px-1.5 py-0.2 rounded-full bg-amber-700/80 text-[9px]"
                             id="syncStatusBadge">
                             <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
                             <span id="syncText">Connecting...</span>
@@ -53,23 +52,17 @@
                 </div>
             </div>
 
-            <!-- Right Actions (Compacts to icons on 320px) -->
-            <div class="flex items-center space-x-1 shrink-0">
-                <button onclick="forceResetDefaults()"
-                    class="p-1.5 sm:px-2.5 sm:py-1.5 text-xs font-semibold rounded-lg bg-amber-700/80 hover:bg-amber-700 transition flex items-center gap-1"
-                    title="Overwrite Google Sheet with your real new details">
-                    <i class="fa-solid fa-arrow-rotate-left text-[11px]"></i>
-                    <span class="hidden md:inline">Reset</span>
-                </button>
+            <!-- Quick Actions: Theme & Sync -->
+            <div class="flex items-center space-x-1.5 shrink-0">
                 <button onclick="toggleDarkMode()"
                     class="p-1.5 text-xs rounded-lg bg-amber-700/80 hover:bg-amber-700 transition" title="Toggle Theme">
                     <i id="themeIcon" class="fa-solid fa-moon text-[11px]"></i>
                 </button>
                 <button onclick="syncFromGoogleSheets()"
-                    class="px-2 py-1.5 sm:px-2.5 sm:py-1.5 text-xs font-semibold rounded-lg bg-emerald-700 hover:bg-emerald-600 transition flex items-center gap-1 shadow"
+                    class="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-700 hover:bg-emerald-600 transition flex items-center gap-1 shadow"
                     title="Sync now">
                     <i class="fa-solid fa-rotate text-[11px]" id="syncSpinner"></i>
-                    <span class="hidden sm:inline">Sync</span>
+                    <span class="hidden sm:inline">Sync Live</span>
                 </button>
             </div>
         </div>
@@ -77,14 +70,13 @@
 
     <main class="w-full max-w-7xl mx-auto px-2 sm:px-6 py-3 space-y-3">
 
-        <!-- KPI Metrics (Zero Icon Overlap on 320px) -->
+        <!-- KPI Metrics Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-            <!-- 1. Ritual Readiness -->
             <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
                 <div
                     class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                    <span>Ritual Readiness</span>
-                    <i class="fa-solid fa-om text-amber-600 text-xs"></i>
+                    <span>Events Ready</span>
+                    <i class="fa-solid fa-calendar-check text-amber-600 text-xs"></i>
                 </div>
                 <h3 class="text-lg sm:text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 leading-tight"
                     id="kpiReadiness">0%</h3>
@@ -92,20 +84,18 @@
                 </p>
             </div>
 
-            <!-- 2. Stay & Taxis -->
             <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
                 <div
                     class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                    <span>Stay & Taxis</span>
+                    <span>Rooms & Vehicles</span>
                     <i class="fa-solid fa-hotel text-blue-600 text-xs"></i>
                 </div>
                 <h3 class="text-lg sm:text-2xl font-black text-blue-600 dark:text-blue-400 mt-0.5 leading-tight"
                     id="kpiLogistics">0</h3>
-                <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiLogisticsSub">Rooms &
-                    Vehicles</p>
+                <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiLogisticsSub">Active Bookings
+                </p>
             </div>
 
-            <!-- 3. Pooja Items -->
             <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
                 <div
                     class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
@@ -117,7 +107,6 @@
                 <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiShoppingSub">0 Pending</p>
             </div>
 
-            <!-- 4. To-Do Tasks -->
             <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
                 <div
                     class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
@@ -130,9 +119,8 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs & Common Filter Toolbar -->
+        <!-- Navigation Tabs & Toolbar (Separated Rooms, Vehicles & Contacts) -->
         <div class="glass-card p-2.5 sm:p-3 rounded-xl border space-y-2.5 shadow-sm">
-            <!-- 6 Navigation Tabs -->
             <div
                 class="flex space-x-1 sm:space-x-1.5 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200 dark:border-slate-700">
                 <button onclick="switchTab('dayview')" id="tab-dayview"
@@ -141,15 +129,19 @@
                 </button>
                 <button onclick="switchTab('schedule')" id="tab-schedule"
                     class="tab-btn active px-2.5 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap">
-                    Ritual & Event Agenda
+                    Event Agenda
                 </button>
                 <button onclick="switchTab('food')" id="tab-food"
                     class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
                     Food & Catering
                 </button>
-                <button onclick="switchTab('logistics')" id="tab-logistics"
+                <button onclick="switchTab('rooms')" id="tab-rooms"
                     class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
-                    Rooms & Vehicles
+                    Rooms
+                </button>
+                <button onclick="switchTab('vehicles')" id="tab-vehicles"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    Vehicles
                 </button>
                 <button onclick="switchTab('shopping')" id="tab-shopping"
                     class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
@@ -159,13 +151,18 @@
                     class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
                     To-Do
                 </button>
+                <button onclick="switchTab('contacts')" id="tab-contacts"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    <i class="fa-solid fa-address-book mr-1 text-emerald-600"></i> Contact List
+                </button>
             </div>
 
             <!-- Search Bar & Add Button -->
             <div class="flex items-center gap-1.5">
                 <div class="relative flex-1">
                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchInput" oninput="renderCurrentTab()" placeholder="Search..."
+                    <input type="text" id="searchInput" oninput="renderCurrentTab()"
+                        placeholder="Search anything (names, rooms, drivers, pooja)..."
                         class="w-full pl-7 pr-2 py-1 text-xs bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none">
                 </div>
                 <button onclick="openRecordModal()"
@@ -203,7 +200,7 @@
                         <span>Daily Master View: <span id="dayviewCurrentLabel" class="text-amber-600 underline">Nov
                                 20</span></span>
                     </h2>
-                    <p class="text-[10px] text-slate-500">All rituals, Appans Hotel meals, to-dos & transit for this day
+                    <p class="text-[10px] text-slate-500">Live agenda, Appans Hotel meals, to-dos & transit for this day
                     </p>
                 </div>
                 <div class="flex items-center gap-1 overflow-x-auto pb-0.5">
@@ -222,11 +219,11 @@
                 </div>
             </div>
 
-            <!-- 4 Responsive Blocks -->
+            <!-- 4 Grid Blocks -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Rituals & Events</h3>
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Event Agenda</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
                             id="dayviewScheduleCount">0 Events</span>
                     </div>
@@ -259,7 +256,7 @@
 
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-blue-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300">Rooms & Transit</h3>
+                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300">Rooms & Vehicles</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-200 text-blue-900"
                             id="dayviewLogisticsCount">Active</span>
                     </div>
@@ -270,11 +267,11 @@
             </div>
         </section>
 
-        <!-- 1. Ritual & Event Agenda Section -->
+        <!-- 1. Event Agenda Section (Removed "Ritual") -->
         <section id="sec-schedule" class="space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
-                    <h2 class="text-xs font-bold">Ritual & Event Agenda</h2>
+                    <h2 class="text-xs font-bold">Event Agenda</h2>
                     <span class="text-[10px] text-slate-500">Tap status to cycle</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
@@ -282,7 +279,7 @@
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Date & Time</th>
-                                <th class="p-2.5">Ritual / Activity</th>
+                                <th class="p-2.5">Activity / Event</th>
                                 <th class="p-2.5">Location</th>
                                 <th class="p-2.5">Transport</th>
                                 <th class="p-2.5">In-Charge</th>
@@ -322,33 +319,61 @@
             </div>
         </section>
 
-        <!-- 3. Rooms & Vehicles Section -->
-        <section id="sec-logistics" class="hidden space-y-3">
+        <!-- 3. Rooms Section (Dedicated Separate Tab) -->
+        <section id="sec-rooms" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
-                    <h2 class="text-xs font-bold">Rooms & Transit Bookings</h2>
+                    <h2 class="text-xs font-bold"><i class="fa-solid fa-hotel text-blue-500 mr-1.5"></i>Room Stays &
+                        Lodging</h2>
                     <span class="text-[10px] text-slate-500">Tap phone to call</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
                     <table class="w-full text-left text-xs min-w-[560px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
-                                <th class="p-2.5">Type</th>
-                                <th class="p-2.5">Name</th>
-                                <th class="p-2.5">Details</th>
+                                <th class="p-2.5">Hotel Name</th>
                                 <th class="p-2.5">Location</th>
-                                <th class="p-2.5">Person</th>
+                                <th class="p-2.5">Room Details & Tariff</th>
+                                <th class="p-2.5">Check-in / Check-out</th>
+                                <th class="p-2.5">Booked By</th>
                                 <th class="p-2.5">Status</th>
                                 <th class="p-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="logisticsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        <tbody id="roomsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- 4. Pooja List Section -->
+        <!-- 4. Vehicles Section (Dedicated Separate Tab) -->
+        <section id="sec-vehicles" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold"><i class="fa-solid fa-taxi text-amber-500 mr-1.5"></i>Vehicle & Taxi
+                        Bookings</h2>
+                    <span class="text-[10px] text-slate-500">Tap phone to call driver</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[580px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Travels & Vehicle</th>
+                                <th class="p-2.5">Driver / Contact</th>
+                                <th class="p-2.5">Rate & Pricing</th>
+                                <th class="p-2.5">Timing & Route</th>
+                                <th class="p-2.5">Booked By</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehiclesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Pooja List Section -->
         <section id="sec-shopping" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
@@ -372,7 +397,7 @@
             </div>
         </section>
 
-        <!-- 5. To-Do Section -->
+        <!-- 6. To-Do Section -->
         <section id="sec-todo" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
@@ -396,9 +421,41 @@
             </div>
         </section>
 
+        <!-- 7. NEW: MASTER CONTACT LIST DIRECTORY TAB -->
+        <section id="sec-contacts" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-emerald-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                    <div>
+                        <h2
+                            class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-address-book text-emerald-600"></i> Master Contact Directory
+                        </h2>
+                        <p class="text-[10px] text-slate-500">Every hotel, driver, caterer, priest & family contact
+                            across the tracker</p>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900"
+                        id="contactDirectoryCount">0 Contacts</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[560px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Category</th>
+                                <th class="p-2.5">Contact Name & Role</th>
+                                <th class="p-2.5">Phone Number (Tap to Call)</th>
+                                <th class="p-2.5">Location / City</th>
+                                <th class="p-2.5">Service Details / Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Modal Form (With DEDICATED MENU BOX) -->
+    <!-- Modal Form (With Separated Rooms & Vehicles Options) -->
     <div id="recordModal"
         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2.5">
         <div
@@ -415,16 +472,17 @@
                     <label class="block font-semibold mb-1">Target Section</label>
                     <select id="formSection" onchange="adjustFormFieldsBySection()"
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
-                        <option value="schedule">1. Ritual & Event Agenda</option>
+                        <option value="schedule">1. Event Agenda</option>
                         <option value="food">2. Food & Catering (Appans Hotel)</option>
-                        <option value="logistics">3. Rooms & Vehicles (Stay & Taxis)</option>
-                        <option value="shopping">4. Pooja List</option>
-                        <option value="todo">5. To-Do Tasks</option>
+                        <option value="rooms">3. Rooms (Sri Kaliswari / JB Sri Ram)</option>
+                        <option value="vehicles">4. Vehicles (Marazzo / Urbania / Innova)</option>
+                        <option value="shopping">5. Pooja List</option>
+                        <option value="todo">6. To-Do Tasks</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block font-semibold mb-1" id="lblTitle">Title</label>
+                    <label class="block font-semibold mb-1" id="lblTitle">Title / Name</label>
                     <input type="text" id="formTitle" required
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                 </div>
@@ -439,7 +497,7 @@
 
                 <div class="grid grid-cols-2 gap-2" id="groupDateCategory">
                     <div>
-                        <label class="block font-semibold mb-1" id="lblDateOrCategory">Day</label>
+                        <label class="block font-semibold mb-1" id="lblDateOrCategory">Day / Category</label>
                         <div id="dateOrCategoryInputWrapper">
                             <select id="formDate"
                                 class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
@@ -450,7 +508,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block font-semibold mb-1" id="lblTimeOrDetails">Time / Details</label>
+                        <label class="block font-semibold mb-1" id="lblTimeOrDetails">Time / Details / Tariff</label>
                         <input type="text" id="formTimeOrDetails"
                             class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                     </div>
@@ -458,19 +516,19 @@
 
                 <div class="grid grid-cols-2 gap-2" id="groupLocationTransport">
                     <div id="colLocation">
-                        <label class="block font-semibold mb-1" id="lblLocation">Location</label>
+                        <label class="block font-semibold mb-1" id="lblLocation">Location / City</label>
                         <input type="text" id="formLocation"
                             class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                     </div>
                     <div id="colTransport">
-                        <label class="block font-semibold mb-1" id="lblTransport">Transport / Headcount</label>
+                        <label class="block font-semibold mb-1" id="lblTransport">Transport / Headcount / Dates</label>
                         <input type="text" id="formTransport"
                             class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block font-semibold mb-1">In-Charge Person</label>
+                    <label class="block font-semibold mb-1" id="lblPerson">Contact Person & Phone</label>
                     <input type="text" id="formPerson" required
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                 </div>
