@@ -92,15 +92,19 @@ function loadStoredState() {
     if (raw) {
         try {
             const parsed = JSON.parse(raw);
-            scheduleData = parsed.schedule || [];
-            roomsData = parsed.rooms || [];
-            vehiclesData = parsed.vehicles || [];
-            shoppingData = parsed.shopping || [];
-            todoData = parsed.todo || [];
-            foodData = parsed.food || [];
-            return;
+            // If data exists and is not completely empty, use it
+            if (parsed.schedule && parsed.schedule.length > 0) {
+                scheduleData = parsed.schedule;
+                roomsData = parsed.rooms || [...INITIAL_ROOMS];
+                vehiclesData = parsed.vehicles || [...INITIAL_VEHICLES];
+                shoppingData = parsed.shopping || [...INITIAL_SHOPPING];
+                todoData = parsed.todo || [...INITIAL_TODO];
+                foodData = parsed.food || [...INITIAL_FOOD];
+                return;
+            }
         } catch (e) { console.error("Corrupt local storage", e); }
     }
+    // Always fall back to defaults if empty
     scheduleData = [...INITIAL_SCHEDULE];
     roomsData = [...INITIAL_ROOMS];
     vehiclesData = [...INITIAL_VEHICLES];
@@ -108,6 +112,7 @@ function loadStoredState() {
     todoData = [...INITIAL_TODO];
     foodData = [...INITIAL_FOOD];
     saveLocalState();
+    pushDataToGoogleSheet();
 }
 
 function saveLocalState() {
