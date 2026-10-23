@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Griha Pravesam Master Tracker (Nov 19 - Nov 21)</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        amber: { 50: '#fffbeb', 100: '#fef3c7', 500: '#f59e0b', 600: '#d97706', 700: '#b45309' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body
+    class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen transition-colors duration-200 overflow-x-hidden">
+
+    <!-- Strict 320px Mobile-Ready Header -->
+    <header class="sticky top-0 z-40 bg-amber-600 dark:bg-slate-800 text-white shadow-md">
+        <div class="w-full max-w-7xl mx-auto px-2.5 sm:px-6 py-2 flex items-center justify-between gap-1.5">
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-1.5 min-w-0">
+                <i class="fa-solid fa-house-chimney text-amber-200 text-base sm:text-lg shrink-0"></i>
+                <div class="min-w-0">
+                    <h1 class="text-xs sm:text-base font-bold tracking-tight truncate leading-tight">Griha Pravesam
+                        Tracker</h1>
+                    <div class="flex items-center gap-1 text-[9px] sm:text-xs text-amber-100">
+                        <span class="whitespace-nowrap">Nov 19–21</span>
+                        <span
+                            class="inline-flex items-center gap-1 font-semibold px-1.5 py-0.2 rounded-full bg-amber-700/90 text-[9px]"
+                            id="syncStatusBadge">
+                            <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse"></span>
+                            <span id="syncText">Connecting...</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Actions (Compacts to icons on 320px) -->
+            <div class="flex items-center space-x-1 shrink-0">
+                <button onclick="forceResetDefaults()"
+                    class="p-1.5 sm:px-2.5 sm:py-1.5 text-xs font-semibold rounded-lg bg-amber-700/80 hover:bg-amber-700 transition flex items-center gap-1"
+                    title="Overwrite Google Sheet with your real new details">
+                    <i class="fa-solid fa-arrow-rotate-left text-[11px]"></i>
+                    <span class="hidden md:inline">Reset</span>
+                </button>
+                <button onclick="toggleDarkMode()"
+                    class="p-1.5 text-xs rounded-lg bg-amber-700/80 hover:bg-amber-700 transition" title="Toggle Theme">
+                    <i id="themeIcon" class="fa-solid fa-moon text-[11px]"></i>
+                </button>
+                <button onclick="syncFromGoogleSheets()"
+                    class="px-2 py-1.5 sm:px-2.5 sm:py-1.5 text-xs font-semibold rounded-lg bg-emerald-700 hover:bg-emerald-600 transition flex items-center gap-1 shadow"
+                    title="Sync now">
+                    <i class="fa-solid fa-rotate text-[11px]" id="syncSpinner"></i>
+                    <span class="hidden sm:inline">Sync</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-7xl mx-auto px-2 sm:px-6 py-3 space-y-3">
+
+        <!-- KPI Metrics (Zero Icon Overlap on 320px) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            <!-- 1. Ritual Readiness -->
+            <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
+                <div
+                    class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                    <span>Ritual Readiness</span>
+                    <i class="fa-solid fa-om text-amber-600 text-xs"></i>
+                </div>
+                <h3 class="text-lg sm:text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 leading-tight"
+                    id="kpiReadiness">0%</h3>
+                <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiReadinessSub">0 of 0 Ready
+                </p>
+            </div>
+
+            <!-- 2. Stay & Taxis -->
+            <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
+                <div
+                    class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                    <span>Stay & Taxis</span>
+                    <i class="fa-solid fa-hotel text-blue-600 text-xs"></i>
+                </div>
+                <h3 class="text-lg sm:text-2xl font-black text-blue-600 dark:text-blue-400 mt-0.5 leading-tight"
+                    id="kpiLogistics">0</h3>
+                <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiLogisticsSub">Rooms &
+                    Vehicles</p>
+            </div>
+
+            <!-- 3. Pooja Items -->
+            <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
+                <div
+                    class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                    <span>Pooja Items</span>
+                    <i class="fa-solid fa-basket-shopping text-indigo-600 text-xs"></i>
+                </div>
+                <h3 class="text-lg sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5 leading-tight"
+                    id="kpiShopping">0</h3>
+                <p class="text-[10px] text-slate-400 font-semibold truncate mt-0.5" id="kpiShoppingSub">0 Pending</p>
+            </div>
+
+            <!-- 4. To-Do Tasks -->
+            <div class="glass-card p-2.5 sm:p-3.5 rounded-xl border shadow-sm">
+                <div
+                    class="flex items-center justify-between text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                    <span>To-Do Tasks</span>
+                    <i class="fa-solid fa-clipboard-check text-rose-600 text-xs"></i>
+                </div>
+                <h3 class="text-lg sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5 leading-tight"
+                    id="kpiTodo">0</h3>
+                <p class="text-[10px] text-rose-500 font-semibold truncate mt-0.5" id="kpiTodoSub">Action Required</p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs & Common Filter Toolbar -->
+        <div class="glass-card p-2.5 sm:p-3 rounded-xl border space-y-2.5 shadow-sm">
+            <!-- 6 Navigation Tabs -->
+            <div
+                class="flex space-x-1 sm:space-x-1.5 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200 dark:border-slate-700">
+                <button onclick="switchTab('dayview')" id="tab-dayview"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                    Day-by-Day Master
+                </button>
+                <button onclick="switchTab('schedule')" id="tab-schedule"
+                    class="tab-btn active px-2.5 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap">
+                    Ritual & Event Agenda
+                </button>
+                <button onclick="switchTab('food')" id="tab-food"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    Food & Catering
+                </button>
+                <button onclick="switchTab('logistics')" id="tab-logistics"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    Rooms & Vehicles
+                </button>
+                <button onclick="switchTab('shopping')" id="tab-shopping"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    Pooja List
+                </button>
+                <button onclick="switchTab('todo')" id="tab-todo"
+                    class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                    To-Do
+                </button>
+            </div>
+
+            <!-- Search Bar & Add Button -->
+            <div class="flex items-center gap-1.5">
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="renderCurrentTab()" placeholder="Search..."
+                        class="w-full pl-7 pr-2 py-1 text-xs bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 outline-none">
+                </div>
+                <button onclick="openRecordModal()"
+                    class="px-3 py-1 text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white rounded-lg shadow shrink-0">
+                    + Add
+                </button>
+            </div>
+
+            <!-- Common Day Filter Bar -->
+            <div class="flex items-center gap-1 pt-1.5 border-t border-slate-200 dark:border-slate-700 overflow-x-auto">
+                <span class="text-[11px] font-bold text-slate-500 shrink-0 mr-1">Day:</span>
+                <button onclick="filterByDay('all')" id="btnDay-all"
+                    class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-600 text-white shrink-0 shadow-sm">All
+                    Days</button>
+                <button onclick="filterByDay('Nov 19')" id="btnDay-Nov19"
+                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                    19</button>
+                <button onclick="filterByDay('Nov 20')" id="btnDay-Nov20"
+                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                    20</button>
+                <button onclick="filterByDay('Nov 21')" id="btnDay-Nov21"
+                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                    21</button>
+            </div>
+        </div>
+
+        <!-- 0. DAY-BY-DAY MASTER OVERVIEW SECTION -->
+        <section id="sec-dayview" class="hidden space-y-3">
+            <div
+                class="glass-card p-2.5 sm:p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm bg-gradient-to-r from-amber-500/10 to-transparent">
+                <div>
+                    <h2
+                        class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calendar-check text-amber-600"></i>
+                        <span>Daily Master View: <span id="dayviewCurrentLabel" class="text-amber-600 underline">Nov
+                                20</span></span>
+                    </h2>
+                    <p class="text-[10px] text-slate-500">All rituals, Appans Hotel meals, to-dos & transit for this day
+                    </p>
+                </div>
+                <div class="flex items-center gap-1 overflow-x-auto pb-0.5">
+                    <button onclick="filterByDay('Nov 19')"
+                        class="px-2 py-0.5 text-[10px] font-bold rounded border bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm shrink-0">Nov
+                        19</button>
+                    <button onclick="filterByDay('Nov 20')"
+                        class="px-2 py-0.5 text-[10px] font-bold rounded border bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm shrink-0">Nov
+                        20</button>
+                    <button onclick="filterByDay('Nov 21')"
+                        class="px-2 py-0.5 text-[10px] font-bold rounded border bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-sm shrink-0">Nov
+                        21</button>
+                    <button onclick="filterByDay('all')"
+                        class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-600 text-white shadow-sm shrink-0">All
+                        Days</button>
+                </div>
+            </div>
+
+            <!-- 4 Responsive Blocks -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Rituals & Events</h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
+                            id="dayviewScheduleCount">0 Events</span>
+                    </div>
+                    <div id="dayviewScheduleContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Food (Appans Hotel)</h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
+                            id="dayviewFoodCount">0 Meals</span>
+                    </div>
+                    <div id="dayviewFoodContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-rose-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-rose-900 dark:text-rose-300">To-Do Tasks</h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-200 text-rose-900"
+                            id="dayviewTodoCount">0 Tasks</span>
+                    </div>
+                    <div id="dayviewTodoContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                    <div class="p-2.5 bg-blue-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300">Rooms & Transit</h3>
+                        <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-200 text-blue-900"
+                            id="dayviewLogisticsCount">Active</span>
+                    </div>
+                    <div id="dayviewLogisticsContainer"
+                        class="p-2.5 divide-y divide-slate-100 dark:divide-slate-800 space-y-1.5 max-h-72 overflow-y-auto">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. Ritual & Event Agenda Section -->
+        <section id="sec-schedule" class="space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold">Ritual & Event Agenda</h2>
+                    <span class="text-[10px] text-slate-500">Tap status to cycle</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[560px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Date & Time</th>
+                                <th class="p-2.5">Ritual / Activity</th>
+                                <th class="p-2.5">Location</th>
+                                <th class="p-2.5">Transport</th>
+                                <th class="p-2.5">In-Charge</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Food & Catering Section -->
+        <section id="sec-food" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold">Food & Catering (Appans Hotel)</h2>
+                    <span class="text-[10px] font-bold text-amber-600">Sivakasi</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[580px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Meal & Timing</th>
+                                <th class="p-2.5">Caterer</th>
+                                <th class="p-2.5">Menu</th>
+                                <th class="p-2.5">Headcount</th>
+                                <th class="p-2.5">Contact</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="foodTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Rooms & Vehicles Section -->
+        <section id="sec-logistics" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold">Rooms & Transit Bookings</h2>
+                    <span class="text-[10px] text-slate-500">Tap phone to call</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[560px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Type</th>
+                                <th class="p-2.5">Name</th>
+                                <th class="p-2.5">Details</th>
+                                <th class="p-2.5">Location</th>
+                                <th class="p-2.5">Person</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logisticsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Pooja List Section -->
+        <section id="sec-shopping" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold">Pooja Items & Shopping</h2>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[540px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Category</th>
+                                <th class="p-2.5">Item</th>
+                                <th class="p-2.5">Notes</th>
+                                <th class="p-2.5">In-Charge</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shoppingTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. To-Do Section -->
+        <section id="sec-todo" class="hidden space-y-3">
+            <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
+                <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
+                    <h2 class="text-xs font-bold">To-Do Tasks</h2>
+                    <span class="text-[10px] text-rose-500 font-semibold">Priority check</span>
+                </div>
+                <div class="overflow-x-auto touch-scroll">
+                    <table class="w-full text-left text-xs min-w-[500px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
+                                <th class="p-2.5">Task Description</th>
+                                <th class="p-2.5">Deadline</th>
+                                <th class="p-2.5">Person</th>
+                                <th class="p-2.5">Status</th>
+                                <th class="p-2.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="todoTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Form (With DEDICATED MENU BOX) -->
+    <div id="recordModal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2.5">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full p-4 shadow-2xl border space-y-3 max-h-[95vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-xs sm:text-sm font-bold" id="recordModalTitle">Add Record</h3>
+                <button onclick="closeRecordModal()" class="text-slate-400 hover:text-slate-600 text-base">✕</button>
+            </div>
+
+            <form id="recordForm" onsubmit="handleSaveRecord(event)" class="space-y-2.5 text-xs">
+                <input type="hidden" id="formRecordId">
+
+                <div>
+                    <label class="block font-semibold mb-1">Target Section</label>
+                    <select id="formSection" onchange="adjustFormFieldsBySection()"
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                        <option value="schedule">1. Ritual & Event Agenda</option>
+                        <option value="food">2. Food & Catering (Appans Hotel)</option>
+                        <option value="logistics">3. Rooms & Vehicles (Stay & Taxis)</option>
+                        <option value="shopping">4. Pooja List</option>
+                        <option value="todo">5. To-Do Tasks</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1" id="lblTitle">Title</label>
+                    <input type="text" id="formTitle" required
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
+                </div>
+
+                <div id="colMenu" class="hidden">
+                    <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">
+                        <i class="fa-solid fa-bowl-food mr-1 text-amber-500"></i>Menu Items
+                    </label>
+                    <textarea id="formMenu" rows="2" placeholder="e.g. Idiyappam, Idli, Pongal"
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2" id="groupDateCategory">
+                    <div>
+                        <label class="block font-semibold mb-1" id="lblDateOrCategory">Day</label>
+                        <div id="dateOrCategoryInputWrapper">
+                            <select id="formDate"
+                                class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                                <option value="Nov 19">Nov 19 (Day 1)</option>
+                                <option value="Nov 20" selected>Nov 20 (Day 2)</option>
+                                <option value="Nov 21">Nov 21 (Day 3)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1" id="lblTimeOrDetails">Time / Details</label>
+                        <input type="text" id="formTimeOrDetails"
+                            class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2" id="groupLocationTransport">
+                    <div id="colLocation">
+                        <label class="block font-semibold mb-1" id="lblLocation">Location</label>
+                        <input type="text" id="formLocation"
+                            class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
+                    </div>
+                    <div id="colTransport">
+                        <label class="block font-semibold mb-1" id="lblTransport">Transport / Headcount</label>
+                        <input type="text" id="formTransport"
+                            class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1">In-Charge Person</label>
+                    <input type="text" id="formPerson" required
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-semibold mb-1">Status</label>
+                    <select id="formStatus"
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2 border-t">
+                    <button type="button" onclick="closeRecordModal()"
+                        class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-1.5 font-bold rounded-lg bg-amber-600 text-white shadow">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>

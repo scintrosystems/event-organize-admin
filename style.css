@@ -1,0 +1,52 @@
+/* Glassmorphism Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.dark .glass-card {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(51, 65, 85, 0.85);
+}
+
+/* Active Navigation Tab */
+.tab-btn.active {
+    border-bottom: 2.5px solid #d97706;
+    color: #d97706 !important;
+    font-weight: 800;
+}
+
+/* Smooth Touch Scrolling for Tables on 320px */
+.touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.5);
+    border-radius: 9999px;
+}
+
+/* 320px Mobile Screen Polish */
+@media (max-width: 360px) {
+    body {
+        font-size: 11px;
+    }
+
+    .tab-btn {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        font-size: 11px !important;
+    }
+}
