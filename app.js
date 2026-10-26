@@ -1,7 +1,7 @@
 // 1. HARDCODED GOOGLE SHEET CONFIGURATION
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw4PnVn44BmMAFUrZ34fVPAlKUYLKk2ztD6jCvFYxKjYgH5sVSio0fVYeGa-SFJAYrB/exec";
 
-// 2. UPDATED INITIAL EVENT AGENDA (REMOVED "RITUAL")
+// 2. UPDATED INITIAL EVENT AGENDA
 const INITIAL_SCHEDULE = [
     { id: 'sc-1', section: 'schedule', date: 'Nov 19', time: '04:00 AM onwards', title: 'Arrival & Hotel Check-in (Sri Kaliswari)', location: 'Sri Kaliswari Le Archids, Sivakasi', transport: 'Marazzo / Taxi', person: 'Arunkumar', status: 'Confirmed' },
     { id: 'sc-2', section: 'schedule', date: 'Nov 19', time: '05:30 PM – 07:00 PM', title: 'Jakkamma Kovil Pooja Visit & Family Blessings', location: 'Jakkamma Kovil', transport: 'Mahindra Marazzo', person: 'Family', status: 'Scheduled' },
@@ -40,7 +40,7 @@ const INITIAL_FOOD = [
     { id: 'fd-4', section: 'food', caterer: 'Appans Hotel', place: 'Sivakasi', contactPerson: '', mealType: 'Dinner', menu: 'Veg Fried Rice, Aappam with Thengai paal and Kadalai Kari', headcount: '40 Members (Relative: 40)', price: '', date: 'Nov 20', time: '8:00 PM', bookedBy: 'Arunkumar', status: 'Confirmed' }
 ];
 
-// 6. UPDATED INITIAL POOJA LIST
+// 6. INITIAL POOJA LIST
 const INITIAL_SHOPPING = [
     { id: 'sh-1', section: 'shopping', category: 'Buying Items', title: 'Salt (Uppu Packet)', notes: 'New packet for Paal Kaachudhal ritual', person: 'Core Family', status: 'Pending' },
     { id: 'sh-2', section: 'shopping', category: 'Buying Items', title: 'Pulichchthanni', notes: 'Quantity: 150 ml (Keep ready for purification)', person: 'Core Family', status: 'Pending' },
@@ -54,13 +54,24 @@ const INITIAL_SHOPPING = [
     { id: 'sh-10', section: 'shopping', category: 'Gifts', title: 'Return Gift Bags (Thamboolam Bags)', notes: '50 Bags with Coconuts, Betel leaves, Sweets', person: 'Family', status: 'Confirmed' }
 ];
 
-// 7. UPDATED INITIAL TO-DO TASKS
+// 7. INITIAL TO-DO TASKS
 const INITIAL_TODO = [
     { id: 'td-1', section: 'todo', title: 'Iyer Kalidass Payment: Total ₹6000, Advance ₹500 paid. Balance ₹5500 envelope ready', date: 'Nov 20', time: 'Nov 20 - Morning', person: 'Arunkumar', status: 'In Progress' },
     { id: 'td-2', section: 'todo', title: 'Luxury Vacations (Marazzo - Viji): Confirm Nov 18 4:00 AM arrival and driver home return timing', date: 'Nov 18', time: 'Nov 18 - 4:00 AM', person: 'Arunkumar', status: 'Confirmed' },
     { id: 'td-3', section: 'todo', title: 'Sri Annai Travels: Confirm Force Urbania 3:30 AM arrival for 8:30 AM group departure', date: 'Nov 20', time: 'Nov 20 - 3:30 AM', person: 'Arunkumar', status: 'Confirmed' },
     { id: 'td-4', section: 'todo', title: 'Bring Garden Items: Pack Seeniyavaraikkai Vaththal & Vendikkai Vaththal to house', date: 'Nov 19', time: 'Nov 19 - Evening', person: 'Family', status: 'Completed' },
     { id: 'td-5', section: 'todo', title: 'Cleaning and Decoration check at 10:00 AM after breakfast', date: 'Nov 20', time: 'Nov 20 - 10:00 AM', person: 'Arunkumar', status: 'Scheduled' }
+];
+
+// 8. INITIAL EDITABLE CONTACTS DIRECTORY
+const INITIAL_CONTACTS = [
+    { id: 'ct-1', section: 'contacts', category: 'Hotel Manager', name: 'Sri Kaliswari Le Archids Manager', phone: '8098615353', location: 'Sivakasi', service: '3 Double Bedrooms Booking (Nov 19-21)' },
+    { id: 'ct-2', section: 'contacts', category: 'Hotel Manager', name: 'JB Sri Ram Residency Manager', phone: '7305153210', location: 'Virudhunagar', service: 'Mini & Premium Suites Booking (Nov 20-21)' },
+    { id: 'ct-3', section: 'contacts', category: 'Driver / Travels', name: 'Viji (Luxury Vacations)', phone: '8489489383', location: 'Sivakasi', service: 'Mahindra Marazzo (7 Seater) Driver' },
+    { id: 'ct-4', section: 'contacts', category: 'Driver / Travels', name: 'Soundararajan K P (Sri Annai Travels)', phone: '9360188819', location: 'Virudhunagar', service: 'Force Urbania (14-Str) & Toyota Innova Booking' },
+    { id: 'ct-5', section: 'contacts', category: 'Priest / Iyer', name: 'Iyer Kalidass', phone: '—', location: 'Pooja Hall', service: 'Ganapathy Homam & All Ceremonies (Adv: ₹500, Tot: ₹6000)' },
+    { id: 'ct-6', section: 'contacts', category: 'Catering Lead', name: 'Appans Hotel Catering Team', phone: '—', location: 'Sivakasi', service: 'Breakfast (60 Pax), Lunch, Snacks, Dinner' },
+    { id: 'ct-7', section: 'contacts', category: 'Coordinator Lead', name: 'Arunkumar', phone: '—', location: 'Family', service: 'Overall Bookings, Finances & Vendor Management' }
 ];
 
 // STATE MANAGEMENT
@@ -70,6 +81,7 @@ let vehiclesData = [];
 let shoppingData = [];
 let todoData = [];
 let foodData = [];
+let contactsData = [];
 let activeTab = 'schedule';
 let currentDayFilter = 'all';
 
@@ -92,7 +104,6 @@ function loadStoredState() {
     if (raw) {
         try {
             const parsed = JSON.parse(raw);
-            // If data exists and is not completely empty, use it
             if (parsed.schedule && parsed.schedule.length > 0) {
                 scheduleData = parsed.schedule;
                 roomsData = parsed.rooms || [...INITIAL_ROOMS];
@@ -100,17 +111,18 @@ function loadStoredState() {
                 shoppingData = parsed.shopping || [...INITIAL_SHOPPING];
                 todoData = parsed.todo || [...INITIAL_TODO];
                 foodData = parsed.food || [...INITIAL_FOOD];
+                contactsData = parsed.contacts || [...INITIAL_CONTACTS];
                 return;
             }
         } catch (e) { console.error("Corrupt local storage", e); }
     }
-    // Always fall back to defaults if empty
     scheduleData = [...INITIAL_SCHEDULE];
     roomsData = [...INITIAL_ROOMS];
     vehiclesData = [...INITIAL_VEHICLES];
     shoppingData = [...INITIAL_SHOPPING];
     todoData = [...INITIAL_TODO];
     foodData = [...INITIAL_FOOD];
+    contactsData = [...INITIAL_CONTACTS];
     saveLocalState();
     pushDataToGoogleSheet();
 }
@@ -122,7 +134,8 @@ function saveLocalState() {
         vehicles: vehiclesData,
         shopping: shoppingData,
         todo: todoData,
-        food: foodData
+        food: foodData,
+        contacts: contactsData
     }));
     updateKPIs();
 }
@@ -200,6 +213,7 @@ async function syncFromGoogleSheets(silent = false) {
         const res = await fetch(`${GOOGLE_SHEET_URL}?_t=${Date.now()}`);
         const data = await res.json();
 
+        // If sheet is empty on initial setup, write defaults
         const isFirstTimeSetup = !localStorage.getItem('griha_pravesam_seeded');
         if ((!Array.isArray(data) || data.length <= 1) && isFirstTimeSetup) {
             scheduleData = [...INITIAL_SCHEDULE];
@@ -208,6 +222,7 @@ async function syncFromGoogleSheets(silent = false) {
             shoppingData = [...INITIAL_SHOPPING];
             todoData = [...INITIAL_TODO];
             foodData = [...INITIAL_FOOD];
+            contactsData = [...INITIAL_CONTACTS];
 
             saveLocalState();
             renderAll();
@@ -219,7 +234,7 @@ async function syncFromGoogleSheets(silent = false) {
 
         if (!Array.isArray(data) || data.length <= 1) {
             scheduleData = []; roomsData = []; vehiclesData = [];
-            shoppingData = []; todoData = []; foodData = [];
+            shoppingData = []; todoData = []; foodData = []; contactsData = [];
             saveLocalState();
             renderAll();
             updateSyncUI('Live Synced (Empty)', 'emerald');
@@ -227,7 +242,7 @@ async function syncFromGoogleSheets(silent = false) {
         }
 
         const seenIds = new Set();
-        let s = [], rm = [], vh = [], sh = [], td = [], fd = [];
+        let s = [], rm = [], vh = [], sh = [], td = [], fd = [], ct = [];
 
         for (let i = 1; i < data.length; i++) {
             const r = data[i];
@@ -256,6 +271,11 @@ async function syncFromGoogleSheets(silent = false) {
                     phone: extractPhone(r[3]), location: r[5] || '', rate: r[3] || '', timing: r[6] || '',
                     bookedBy: 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
                 });
+            } else if (sec === 'contacts') {
+                ct.push({
+                    id, section: 'contacts', category: r[2] || 'Coordinator', service: r[3] || '',
+                    name: r[4] || '', location: r[5] || '', phone: r[7] || '—'
+                });
             } else {
                 const item = {
                     id, section: sec, date: cleanDate(r[2]) || r[2], category: r[2] || '',
@@ -275,6 +295,7 @@ async function syncFromGoogleSheets(silent = false) {
         shoppingData = sh;
         todoData = td;
         foodData = fd;
+        contactsData = ct.length ? ct : [...INITIAL_CONTACTS];
 
         localStorage.setItem('griha_pravesam_seeded', 'true');
         saveLocalState();
@@ -298,7 +319,8 @@ function pushDataToGoogleSheet() {
         ...vehiclesData.map(x => ({ ...x, section: 'vehicles', category: 'Vehicle', title: x.name, details: x.rate, location: x.location, transport: x.timing, person: x.phone, status: x.status })),
         ...foodData.map(x => ({ ...x, section: 'food' })),
         ...shoppingData.map(x => ({ ...x, section: 'shopping' })),
-        ...todoData.map(x => ({ ...x, section: 'todo' }))
+        ...todoData.map(x => ({ ...x, section: 'todo' })),
+        ...contactsData.map(x => ({ ...x, section: 'contacts', category: x.category, details: x.service, title: x.name, location: x.location, person: x.phone, status: 'Confirmed' }))
     ];
 
     fetch(GOOGLE_SHEET_URL, {
@@ -392,7 +414,7 @@ function extractPhone(text) {
     return match ? match[0] : '';
 }
 
-// 1. RENDER EVENT AGENDA (REMOVED RITUAL)
+// 1. EVENT AGENDA TABLE
 function renderScheduleTable() {
     const tbody = document.getElementById('scheduleTableBody');
     if (!tbody) return;
@@ -400,11 +422,7 @@ function renderScheduleTable() {
 
     const rows = scheduleData.filter(item => {
         const dayMatch = currentDayFilter === 'all' || (item.date && item.date.includes(currentDayFilter));
-        const searchMatch = !search ||
-            (item.title && item.title.toLowerCase().includes(search)) ||
-            (item.person && item.person.toLowerCase().includes(search)) ||
-            (item.location && item.location.toLowerCase().includes(search)) ||
-            (item.time && item.time.toLowerCase().includes(search));
+        const searchMatch = !search || (item.title && item.title.toLowerCase().includes(search)) || (item.person && item.person.toLowerCase().includes(search));
         return dayMatch && searchMatch;
     });
 
@@ -425,7 +443,7 @@ function renderScheduleTable() {
         `).join('');
 }
 
-// 2. RENDER FOOD & CATERING
+// 2. FOOD & CATERING
 function renderFoodTable() {
     const tbody = document.getElementById('foodTableBody');
     if (!tbody) return;
@@ -436,8 +454,7 @@ function renderFoodTable() {
         const matchCaterer = (item.caterer || item.title || '').toLowerCase().includes(search);
         const matchMeal = (item.mealType || item.time || '').toLowerCase().includes(search);
         const matchMenu = (item.menu || '').toLowerCase().includes(search);
-        const matchPlace = (item.place || item.location || '').toLowerCase().includes(search);
-        return dayMatch && (!search || matchCaterer || matchMeal || matchMenu || matchPlace);
+        return dayMatch && (!search || matchCaterer || matchMeal || matchMenu);
     });
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No meals found for this day.</td></tr>` :
@@ -457,13 +474,12 @@ function renderFoodTable() {
         `).join('');
 }
 
-// 3. RENDER ROOMS TABLE (SEPARATE TAB)
+// 3. ROOMS TABLE
 function renderRoomsTable() {
     const tbody = document.getElementById('roomsTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-
-    const rows = roomsData.filter(i => !search || i.name.toLowerCase().includes(search) || i.details.toLowerCase().includes(search) || i.location.toLowerCase().includes(search));
+    const rows = roomsData.filter(i => !search || i.name.toLowerCase().includes(search) || i.details.toLowerCase().includes(search));
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No rooms found.</td></tr>` :
         rows.map(r => `
@@ -482,13 +498,12 @@ function renderRoomsTable() {
         `).join('');
 }
 
-// 4. RENDER VEHICLES TABLE (SEPARATE TAB)
+// 4. VEHICLES TABLE
 function renderVehiclesTable() {
     const tbody = document.getElementById('vehiclesTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-
-    const rows = vehiclesData.filter(i => !search || i.name.toLowerCase().includes(search) || i.model.toLowerCase().includes(search) || (i.contactPerson && i.contactPerson.toLowerCase().includes(search)));
+    const rows = vehiclesData.filter(i => !search || i.name.toLowerCase().includes(search) || i.model.toLowerCase().includes(search));
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No vehicles found.</td></tr>` :
         rows.map(r => `
@@ -513,13 +528,12 @@ function renderVehiclesTable() {
         `).join('');
 }
 
-// 5. RENDER POOJA LIST
+// 5. POOJA LIST
 function renderShoppingTable() {
     const tbody = document.getElementById('shoppingTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-
-    const rows = shoppingData.filter(item => !search || item.title.toLowerCase().includes(search) || item.category.toLowerCase().includes(search));
+    const rows = shoppingData.filter(item => !search || item.title.toLowerCase().includes(search));
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="6" class="p-4 text-center text-slate-400">No pooja items found.</td></tr>` :
         rows.map(r => `
@@ -537,12 +551,11 @@ function renderShoppingTable() {
         `).join('');
 }
 
-// 6. RENDER TO-DO
+// 6. TO-DO
 function renderTodoTable() {
     const tbody = document.getElementById('todoTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-
     const rows = todoData.filter(item => {
         const dayMatch = currentDayFilter === 'all' || (item.date && item.date.includes(currentDayFilter)) || (item.time && item.time.includes(currentDayFilter));
         return dayMatch && (!search || item.title.toLowerCase().includes(search));
@@ -563,29 +576,18 @@ function renderTodoTable() {
         `).join('');
 }
 
-// 7. NEW: RENDER MASTER CONTACT LIST DIRECTORY
+// 7. EDITABLE MASTER CONTACT DIRECTORY TABLE
 function renderContactsTable() {
     const tbody = document.getElementById('contactsTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
 
-    // Compile all unique contacts across rooms, vehicles, food, schedule
-    const contacts = [
-        { category: 'Hotel Manager', name: 'Sri Kaliswari Le Archids Manager', phone: '8098615353', location: 'Sivakasi', service: '3 Double Bedrooms Booking (Nov 19-21)' },
-        { category: 'Hotel Manager', name: 'JB Sri Ram Residency Manager', phone: '7305153210', location: 'Virudhunagar', service: 'Mini & Premium Suites Booking (Nov 20-21)' },
-        { category: 'Driver / Travels', name: 'Viji (Luxury Vacations)', phone: '8489489383', location: 'Sivakasi', service: 'Mahindra Marazzo (7 Seater) Driver' },
-        { category: 'Driver / Travels', name: 'Soundararajan K P (Sri Annai Travels)', phone: '9360188819', location: 'Virudhunagar', service: 'Force Urbania (14-Str) & Toyota Innova Booking' },
-        { category: 'Priest / Iyer', name: 'Iyer Kalidass', phone: '—', location: 'Pooja Hall', service: 'Ganapathy Homam & All Ceremonies (Adv: ₹500, Tot: ₹6000)' },
-        { category: 'Catering Lead', name: 'Appans Hotel Catering Team', phone: '—', location: 'Sivakasi', service: 'Breakfast (60 Pax), Lunch, Snacks, Dinner' },
-        { category: 'Coordinator Lead', name: 'Arunkumar', phone: '—', location: 'Family', service: 'Overall Bookings, Finances & Vendor Management' }
-    ];
-
-    const filtered = contacts.filter(c => !search || c.name.toLowerCase().includes(search) || c.category.toLowerCase().includes(search) || c.location.toLowerCase().includes(search) || c.phone.includes(search));
+    const filtered = contactsData.filter(c => !search || c.name.toLowerCase().includes(search) || c.category.toLowerCase().includes(search) || c.location.toLowerCase().includes(search) || c.phone.includes(search));
 
     const countEl = document.getElementById('contactDirectoryCount');
     if (countEl) countEl.innerText = `${filtered.length} Contacts`;
 
-    tbody.innerHTML = filtered.length === 0 ? `<tr><td colspan="5" class="p-4 text-center text-slate-400">No contacts matching search.</td></tr>` :
+    tbody.innerHTML = filtered.length === 0 ? `<tr><td colspan="6" class="p-4 text-center text-slate-400">No contacts found.</td></tr>` :
         filtered.map(c => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-bold rounded-lg ${c.category.includes('Hotel') ? 'bg-blue-100 text-blue-800' : c.category.includes('Driver') ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${c.category}</span></td>
@@ -593,16 +595,20 @@ function renderContactsTable() {
                 <td class="p-2.5 font-semibold text-emerald-600 text-xs">${highlightPhoneNumbers(c.phone)}</td>
                 <td class="p-2.5 text-slate-600 dark:text-slate-300"><i class="fa-solid fa-location-dot text-rose-500 mr-1 text-[10px]"></i>${c.location}</td>
                 <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">${c.service}</td>
+                <td class="p-2.5 text-right whitespace-nowrap">
+                    <button onclick="editRecord('${c.id}', 'contacts')" class="text-amber-600 p-1 mr-1" title="Edit Contact"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button onclick="deleteRecord('${c.id}', 'contacts')" class="text-rose-500 p-1" title="Delete Contact"><i class="fa-solid fa-trash"></i></button>
+                </td>
             </tr>
         `).join('');
 }
 
-// 0. RENDER DAY-BY-DAY MASTER OVERVIEW
+// 0. DAY-BY-DAY MASTER OVERVIEW
 function renderDayOverview() {
     const day = currentDayFilter;
     const filterFn = item => day === 'all' || (item.date && item.date.includes(day)) || (item.time && item.time.includes(day));
 
-    // 1. Event Agenda
+    // 1. Events
     const dayS = scheduleData.filter(filterFn);
     const sContainer = document.getElementById('dayviewScheduleContainer');
     const sCount = document.getElementById('dayviewScheduleCount');
@@ -641,7 +647,7 @@ function renderDayOverview() {
             `}).join('');
     }
 
-    // 3. Rooms & Lodging (SEPARATED!)
+    // 3. Rooms
     const rmContainer = document.getElementById('dayviewRoomsContainer');
     const rmCount = document.getElementById('dayviewRoomsCount');
     if (rmCount) rmCount.innerText = `${roomsData.length} Bookings`;
@@ -659,7 +665,7 @@ function renderDayOverview() {
             `).join('');
     }
 
-    // 4. Vehicles & Drivers (SEPARATED!)
+    // 4. Vehicles
     const vhContainer = document.getElementById('dayviewVehiclesContainer');
     const vhCount = document.getElementById('dayviewVehiclesCount');
     if (vhCount) vhCount.innerText = `${vehiclesData.length} Vehicles`;
@@ -717,6 +723,7 @@ function getSectionArray(sec) {
     if (sec === 'rooms') return roomsData;
     if (sec === 'vehicles') return vehiclesData;
     if (sec === 'shopping') return shoppingData;
+    if (sec === 'contacts') return contactsData;
     return todoData;
 }
 
@@ -755,10 +762,31 @@ function adjustFormFieldsBySection() {
     const colTrans = document.getElementById('colTransport');
     const colMenu = document.getElementById('colMenu');
     const lblPerson = document.getElementById('lblPerson');
+    const colStatus = document.getElementById('colStatus');
 
     if (colMenu) colMenu.classList.add('hidden');
 
-    if (sec === 'food') {
+    if (sec === 'contacts') {
+        if (colStatus) colStatus.classList.add('hidden');
+        lblTitle.innerText = 'Contact Name & Title';
+        lblDateOrCat.innerText = 'Category / Role';
+        dateWrapper.innerHTML = `
+            <select id="formDate" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                <option value="Hotel Manager">Hotel Manager</option>
+                <option value="Driver / Travels">Driver / Travels</option>
+                <option value="Priest / Iyer">Priest / Iyer</option>
+                <option value="Catering Lead">Catering Lead</option>
+                <option value="Coordinator Lead">Coordinator Lead</option>
+                <option value="Family Coordinator">Family Coordinator</option>
+                <option value="Vendor">Other Vendor</option>
+            </select>`;
+        lblTime.innerText = 'Service Details / Purpose';
+        colLoc.classList.remove('hidden');
+        colTrans.classList.add('hidden');
+        document.getElementById('lblLocation').innerText = 'Location / City';
+        lblPerson.innerText = 'Phone Number (e.g. 98401 22334)';
+    } else if (sec === 'food') {
+        if (colStatus) colStatus.classList.remove('hidden');
         if (colMenu) colMenu.classList.remove('hidden');
         lblTitle.innerText = 'Caterer / Hotel Name';
         lblDateOrCat.innerText = 'Event Day';
@@ -775,6 +803,7 @@ function adjustFormFieldsBySection() {
         document.getElementById('lblTransport').innerText = 'Headcount (e.g. 40 Max)';
         lblPerson.innerText = 'Booked By / Contact';
     } else if (sec === 'rooms') {
+        if (colStatus) colStatus.classList.remove('hidden');
         lblTitle.innerText = 'Hotel / Room Name';
         lblDateOrCat.innerText = 'City';
         dateWrapper.innerHTML = `<input type="text" id="formDate" placeholder="Sivakasi / Virudhunagar" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">`;
@@ -785,6 +814,7 @@ function adjustFormFieldsBySection() {
         document.getElementById('lblTransport').innerText = 'Check-in to Check-out Dates';
         lblPerson.innerText = 'Booked By Person';
     } else if (sec === 'vehicles') {
+        if (colStatus) colStatus.classList.remove('hidden');
         lblTitle.innerText = 'Travels & Vehicle Model';
         lblDateOrCat.innerText = 'Driver City';
         dateWrapper.innerHTML = `<input type="text" id="formDate" placeholder="Sivakasi / Virudhunagar" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">`;
@@ -795,6 +825,7 @@ function adjustFormFieldsBySection() {
         document.getElementById('lblTransport').innerText = 'Booking Dates & Timings';
         lblPerson.innerText = 'Driver / Contact Name';
     } else if (sec === 'schedule') {
+        if (colStatus) colStatus.classList.remove('hidden');
         lblTitle.innerText = 'Event / Activity Title';
         lblDateOrCat.innerText = 'Day';
         dateWrapper.innerHTML = `
@@ -810,6 +841,7 @@ function adjustFormFieldsBySection() {
         document.getElementById('lblTransport').innerText = 'Transport Mode';
         lblPerson.innerText = 'In-Charge Person';
     } else if (sec === 'shopping') {
+        if (colStatus) colStatus.classList.remove('hidden');
         lblTitle.innerText = 'Pooja Item Name';
         lblDateOrCat.innerText = 'Category';
         dateWrapper.innerHTML = `
@@ -824,6 +856,7 @@ function adjustFormFieldsBySection() {
         colTrans.classList.add('hidden');
         lblPerson.innerText = 'Assigned Person';
     } else if (sec === 'todo') {
+        if (colStatus) colStatus.classList.remove('hidden');
         lblTitle.innerText = 'Task Description';
         lblDateOrCat.innerText = 'Target Day';
         dateWrapper.innerHTML = `
@@ -849,7 +882,7 @@ function openRecordModal(sectionToPreselect) {
     if (sectionToPreselect) {
         document.getElementById('formSection').value = sectionToPreselect;
     } else {
-        document.getElementById('formSection').value = activeTab === 'dayview' || activeTab === 'contacts' ? 'schedule' : activeTab;
+        document.getElementById('formSection').value = activeTab === 'dayview' ? 'schedule' : activeTab;
     }
 
     adjustFormFieldsBySection();
@@ -875,11 +908,11 @@ function editRecord(id, sec) {
     const dateEl = document.getElementById('formDate');
     if (dateEl) dateEl.value = item.date || item.category || item.location || 'Nov 20';
 
-    document.getElementById('formTimeOrDetails').value = item.mealType || item.time || item.details || item.rate || '';
+    document.getElementById('formTimeOrDetails').value = item.mealType || item.time || item.details || item.rate || item.service || '';
     if (document.getElementById('formLocation')) document.getElementById('formLocation').value = item.location || item.phone || item.place || '';
     if (document.getElementById('formTransport')) document.getElementById('formTransport').value = item.transport || item.headcount || item.timing || '';
     if (document.getElementById('formMenu')) document.getElementById('formMenu').value = item.menu || '';
-    document.getElementById('formPerson').value = item.person || item.contactPerson || item.bookedBy || '';
+    document.getElementById('formPerson').value = item.person || item.contactPerson || item.bookedBy || item.phone || '';
     document.getElementById('formStatus').value = item.status || 'Confirmed';
 }
 
@@ -890,6 +923,7 @@ function deleteRecord(id, sec) {
     else if (sec === 'rooms') roomsData = roomsData.filter(x => x.id !== id);
     else if (sec === 'vehicles') vehiclesData = vehiclesData.filter(x => x.id !== id);
     else if (sec === 'shopping') shoppingData = shoppingData.filter(x => x.id !== id);
+    else if (sec === 'contacts') contactsData = contactsData.filter(x => x.id !== id);
     else todoData = todoData.filter(x => x.id !== id);
 
     saveLocalState();
@@ -914,7 +948,13 @@ function handleSaveRecord(e) {
 
     let newObj = { id, section: sec, status };
 
-    if (sec === 'schedule') {
+    if (sec === 'contacts') {
+        newObj.name = title;
+        newObj.category = dateOrCat;
+        newObj.service = timeOrDetails;
+        newObj.location = location;
+        newObj.phone = person;
+    } else if (sec === 'schedule') {
         newObj.title = title; newObj.date = dateOrCat; newObj.time = timeOrDetails;
         newObj.location = location; newObj.transport = transport; newObj.person = person;
     } else if (sec === 'food') {

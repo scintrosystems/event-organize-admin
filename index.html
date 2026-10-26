@@ -458,21 +458,20 @@
                             class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                             <i class="fa-solid fa-address-book text-emerald-600"></i> Master Contact Directory
                         </h2>
-                        <p class="text-[10px] text-slate-500">Every hotel, driver, caterer, priest & coordinator with
-                            tap-to-call</p>
                     </div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900"
                         id="contactDirectoryCount">0 Contacts</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[560px]">
+                    <table class="w-full text-left text-xs min-w-[580px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Category</th>
                                 <th class="p-2.5">Contact Name & Role</th>
-                                <th class="p-2.5">Phone Number (Tap to Call)</th>
+                                <th class="p-2.5">Phone Number</th>
                                 <th class="p-2.5">Location / City</th>
                                 <th class="p-2.5">Service Details / Notes</th>
+                                <th class="p-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="contactsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
@@ -506,6 +505,7 @@
                         <option value="vehicles">4. Vehicles (Marazzo / Urbania / Innova)</option>
                         <option value="shopping">5. Pooja List</option>
                         <option value="todo">6. To-Do Tasks</option>
+                        <option value="contacts">7. Contact Directory</option>
                     </select>
                 </div>
 
@@ -561,7 +561,7 @@
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                 </div>
 
-                <div>
+                <div id="colStatus">
                     <label class="block font-semibold mb-1">Status</label>
                     <select id="formStatus"
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
