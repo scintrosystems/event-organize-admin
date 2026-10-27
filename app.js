@@ -19,17 +19,17 @@ const INITIAL_SCHEDULE = [
 
 // 3. INITIAL ROOMS
 const INITIAL_ROOMS = [
-    { id: 'rm-1', section: 'rooms', name: 'Sri Kaliswari Le Archids', location: 'Sri Kaliswari Le Archids, Sivakasi', phone: '8098615353', details: '3 Double Bedrooms • ₹2200+GST/room (2 Max) • Extra bed max 1 (₹650+GST)', timing: '19-Nov 4:00 AM to 21-Nov 10:00 AM', bookedBy: 'Arunkumar', notes: '3 Deluxe rooms on 1st floor', status: 'Confirmed' },
-    { id: 'rm-2', section: 'rooms', name: 'JB Sri Ram Residency', location: 'JB Sri Ram Residency, Virudhunagar', phone: '7305153210', details: '1 Mini Suite • ₹5000+GST (2 Max) • Extra bed max 1 (₹1000+GST)', timing: '20-Nov 4:00 AM to 21-Nov 8:00 PM', bookedBy: 'Arunkumar', notes: 'Late checkout arranged till 8 PM', status: 'Confirmed' },
-    { id: 'rm-3', section: 'rooms', name: 'JB Sri Ram Residency', location: 'JB Sri Ram Residency, Virudhunagar', phone: '7305153210', details: '1 Premium Suite • ₹8500+GST (4 Max) • Extra bed max 2', timing: '20-Nov 4:00 AM to 21-Nov 8:00 PM', bookedBy: 'Arunkumar', notes: 'Spacious suite for elders', status: 'Confirmed' }
+    { id: 'rm-1', section: 'rooms', name: 'Sri Kaliswari Le Archids', location: 'Sri Kaliswari Le Archids, Sivakasi', phone: '8098615353', details: '3 Double Bedrooms • ₹2200+GST/room (2 Max) • Extra bed max 1 (₹650+GST)', timing: '19-Nov 4:00 AM to 21-Nov 10:00 AM', date: 'Nov 19', bookedBy: 'Arunkumar', notes: '3 Deluxe rooms on 1st floor', status: 'Confirmed' },
+    { id: 'rm-2', section: 'rooms', name: 'JB Sri Ram Residency', location: 'JB Sri Ram Residency, Virudhunagar', phone: '7305153210', details: '1 Mini Suite • ₹5000+GST (2 Max) • Extra bed max 1 (₹1000+GST)', timing: '20-Nov 4:00 AM to 21-Nov 8:00 PM', date: 'Nov 20', bookedBy: 'Arunkumar', notes: 'Late checkout arranged till 8 PM', status: 'Confirmed' },
+    { id: 'rm-3', section: 'rooms', name: 'JB Sri Ram Residency', location: 'JB Sri Ram Residency, Virudhunagar', phone: '7305153210', details: '1 Premium Suite • ₹8500+GST (4 Max) • Extra bed max 2', timing: '20-Nov 4:00 AM to 21-Nov 8:00 PM', date: 'Nov 20', bookedBy: 'Arunkumar', notes: 'Spacious suite for elders', status: 'Confirmed' }
 ];
 
 // 4. INITIAL VEHICLES
 const INITIAL_VEHICLES = [
-    { id: 'vh-1', section: 'vehicles', name: 'Luxury Vacations (Mahindra Marazzo)', model: 'Mahindra Marazzo (7 Seater)', contactPerson: 'Viji', phone: '8489489383', location: 'Sivakasi', rate: '₹3000/day + ₹13/KM', timing: '18-Nov 4:00 AM to 22-Nov 10:00 AM', bookedBy: 'Arunkumar', notes: 'Driver is Sivakasi. Only concern about return to home timing.', status: 'Confirmed' },
-    { id: 'vh-2', section: 'vehicles', name: 'Sri Annai Tours And Travels (Force Urbania)', model: 'Force Urbania (14 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹7500/day + ₹25/KM', timing: '20-Nov 3:30 AM to 10:00 PM', bookedBy: 'Arunkumar', notes: 'Used for 8:30 AM group departure', status: 'Confirmed' },
-    { id: 'vh-3', section: 'vehicles', name: 'Sri Annai Tours And Travels (Toyota Innova)', model: 'Toyota Innova (7 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹3500/day + ₹15/KM', timing: '3:30 AM to 10:00 PM', bookedBy: 'Arunkumar', notes: 'Driver is Virudhunagar', status: 'Confirmed' },
-    { id: 'vh-4', section: 'vehicles', name: 'Sri Annai Tours And Travels (Innova Crysta)', model: 'Toyota Innova Crysta (7 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹4500/day + ₹17/KM', timing: '3:30 AM to 10:00 PM', bookedBy: 'Arunkumar', notes: 'Available on standby', status: 'Scheduled' }
+    { id: 'vh-1', section: 'vehicles', name: 'Luxury Vacations (Mahindra Marazzo)', model: 'Mahindra Marazzo (7 Seater)', contactPerson: 'Viji', phone: '8489489383', location: 'Sivakasi', rate: '₹3000/day + ₹13/KM', timing: '18-Nov 4:00 AM to 22-Nov 10:00 AM', date: 'Nov 18', bookedBy: 'Arunkumar', notes: 'Driver is Sivakasi. Only concern about return to home timing.', status: 'Confirmed' },
+    { id: 'vh-2', section: 'vehicles', name: 'Sri Annai Tours And Travels (Force Urbania)', model: 'Force Urbania (14 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹7500/day + ₹25/KM', timing: '20-Nov 3:30 AM to 10:00 PM', date: 'Nov 20', bookedBy: 'Arunkumar', notes: 'Used for 8:30 AM group departure', status: 'Confirmed' },
+    { id: 'vh-3', section: 'vehicles', name: 'Sri Annai Tours And Travels (Toyota Innova)', model: 'Toyota Innova (7 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹3500/day + ₹15/KM', timing: '20-Nov 3:30 AM to 10:00 PM', date: 'Nov 20', bookedBy: 'Arunkumar', notes: 'Driver is Virudhunagar', status: 'Confirmed' },
+    { id: 'vh-4', section: 'vehicles', name: 'Sri Annai Tours And Travels (Innova Crysta)', model: 'Toyota Innova Crysta (7 Seater)', contactPerson: 'Soundararajan K P', phone: '9360188819', location: 'Virudhunagar', rate: '₹4500/day + ₹17/KM', timing: '20-Nov 3:30 AM to 10:00 PM', date: 'Nov 20', bookedBy: 'Arunkumar', notes: 'Available on standby', status: 'Scheduled' }
 ];
 
 // 5. INITIAL FOOD
@@ -82,14 +82,12 @@ let shoppingData = [];
 let todoData = [];
 let foodData = [];
 let contactsData = [];
-
-// DYNAMIC CUSTOM SECTIONS ENGINE
 let customSections = [];
 let customItemsData = [];
 
 let activeTab = 'schedule';
 let currentDayFilter = 'all';
-let currentTimeSort = 'none'; // 'none' | 'asc' | 'desc'
+let currentTimeSort = 'none';
 
 // INITIALIZATION
 window.addEventListener('DOMContentLoaded', () => {
@@ -188,28 +186,63 @@ function formatLocationLink(loc) {
     </a>`;
 }
 
-// =========================================================================
-// ✅ FIXED TIME-TO-MINUTES PARSER (SUPPORTS DATES, AM/PM, AND KEYWORDS)
-// =========================================================================
+// SMART DAY MATCHING HELPER
+function matchesDay(item, targetDay) {
+    if (!targetDay || targetDay === 'all') return true;
+
+    const dayNum = targetDay.replace(/\D/g, '');
+    if (!dayNum) return true;
+
+    const pool = `${item.date || ''} ${item.timing || ''} ${item.time || ''} ${item.title || ''} ${item.details || ''} ${item.notes || ''}`.toLowerCase();
+
+    if (pool.includes(`nov ${dayNum}`) ||
+        pool.includes(`${dayNum}-nov`) ||
+        pool.includes(`${dayNum} nov`) ||
+        pool.includes(`nov${dayNum}`)) {
+        return true;
+    }
+
+    if (pool.includes('19-nov') && pool.includes('21-nov')) {
+        const num = parseInt(dayNum, 10);
+        if (num >= 19 && num <= 21) return true;
+    }
+    if (pool.includes('20-nov') && pool.includes('21-nov')) {
+        const num = parseInt(dayNum, 10);
+        if (num >= 20 && num <= 21) return true;
+    }
+    if (pool.includes('18-nov') && pool.includes('22-nov')) {
+        const num = parseInt(dayNum, 10);
+        if (num >= 18 && num <= 22) return true;
+    }
+
+    return false;
+}
+
+function parseDateToScore(dateStr, timeStr) {
+    const full = `${dateStr || ''} ${timeStr || ''}`.toLowerCase();
+    let dayNum = 99;
+
+    if (full.includes('nov 18') || full.includes('18-nov') || full.includes('18')) dayNum = 18;
+    else if (full.includes('nov 19') || full.includes('19-nov') || full.includes('19')) dayNum = 19;
+    else if (full.includes('nov 20') || full.includes('20-nov') || full.includes('20')) dayNum = 20;
+    else if (full.includes('nov 21') || full.includes('21-nov') || full.includes('21')) dayNum = 21;
+    else if (full.includes('nov 22') || full.includes('22-nov') || full.includes('22')) dayNum = 22;
+
+    const timeMins = parseTimeToMinutes(timeStr || dateStr);
+    return (dayNum * 10000) + timeMins;
+}
+
 function parseTimeToMinutes(timeStr) {
     if (!timeStr) return 9999;
     const s = String(timeStr).trim();
 
-    // 1. Check for approximate keywords
-    if (s.toLowerCase().includes('morning') && !s.match(/\d:\d/)) return 480;   // 8:00 AM
-    if (s.toLowerCase().includes('afternoon') && !s.match(/\d:\d/)) return 780; // 1:00 PM
-    if (s.toLowerCase().includes('evening') && !s.match(/\d:\d/)) return 1020;  // 5:00 PM
-    if (s.toLowerCase().includes('night') && !s.match(/\d:\d/)) return 1260;    // 9:00 PM
+    if (s.toLowerCase().includes('morning') && !s.match(/\d:\d/)) return 480;
+    if (s.toLowerCase().includes('afternoon') && !s.match(/\d:\d/)) return 780;
+    if (s.toLowerCase().includes('evening') && !s.match(/\d:\d/)) return 1020;
+    if (s.toLowerCase().includes('night') && !s.match(/\d:\d/)) return 1260;
 
-    // 2. Strictly match time with colon (e.g. "04:00 AM", "3:30 PM", "05:30")
-    // Ignores day numbers like "Nov 18" or "20-Nov" that precede the time!
     let match = s.match(/(?:^|[^\d])(\d{1,2})[:.](\d{2})\s*(AM|PM)?/i);
-
-    // 3. Fallback: match hour with AM/PM without colon (e.g. "4 PM", "10 AM")
-    if (!match) {
-        match = s.match(/(?:^|[^\d])(\d{1,2})\s*(AM|PM)/i);
-    }
-
+    if (!match) match = s.match(/(?:^|[^\d])(\d{1,2})\s*(AM|PM)/i);
     if (!match) return 9999;
 
     let hours = parseInt(match[1], 10);
@@ -222,14 +255,46 @@ function parseTimeToMinutes(timeStr) {
     return hours * 60 + minutes;
 }
 
-// TOGGLE TIME-WISE SORTING (RE-RENDERS EVERYTHING IMMEDIATELY)
+function sortItemsChronologically(items) {
+    return [...items].sort((a, b) => {
+        const scoreA = parseDateToScore(a.date || a.timing || a.time, a.time || a.timing);
+        const scoreB = parseDateToScore(b.date || b.timing || b.time, b.time || b.timing);
+        if (currentTimeSort === 'desc') return scoreB - scoreA;
+        return scoreA - scoreB;
+    });
+}
+
+function filterByDay(day) {
+    currentDayFilter = day;
+
+    ['all', 'Nov 19', 'Nov 20', 'Nov 21'].forEach(d => {
+        const btnId = 'btnDay-' + d.replace(/\s+/g, '');
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        if (d === day) {
+            btn.className = 'px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-600 text-white shrink-0 shadow-sm transition';
+        } else {
+            btn.className = 'px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-100 shrink-0 transition';
+        }
+    });
+
+    const lbl = document.getElementById('dayviewCurrentLabel');
+    if (lbl) lbl.innerText = day === 'all' ? 'All Days' : day;
+
+    renderAll();
+}
+
+function filterScheduleDay(day) {
+    filterByDay(day);
+}
+
 function toggleTimeSort() {
     if (currentTimeSort === 'none') currentTimeSort = 'asc';
     else if (currentTimeSort === 'asc') currentTimeSort = 'desc';
     else currentTimeSort = 'none';
 
     updateTimeSortUI();
-    renderAll(); // Sorts across all tabs and Dayview!
+    renderAll();
 }
 
 function updateTimeSortUI() {
@@ -353,12 +418,12 @@ async function syncFromGoogleSheets(silent = false) {
             } else if (sec === 'rooms' || (sec === 'logistics' && String(r[2]).includes('Room'))) {
                 rm.push({
                     id, section: 'rooms', name: r[4] || 'Hotel', location: r[5] || 'Sivakasi', phone: extractPhone(r[3]),
-                    details: r[3] || '', timing: r[6] || '', bookedBy: r[7] || 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
+                    details: r[3] || '', timing: r[6] || '', date: cleanDate(r[2]) || 'Nov 19', bookedBy: r[7] || 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
                 });
             } else if (sec === 'vehicles' || (sec === 'logistics' && String(r[2]).includes('Vehicle'))) {
                 vh.push({
                     id, section: 'vehicles', name: r[4] || 'Travels', model: r[4], contactPerson: r[7] || '',
-                    phone: extractPhone(r[3]), location: r[5] || '', rate: r[3] || '', timing: r[6] || '',
+                    phone: extractPhone(r[3]), location: r[5] || '', rate: r[3] || '', timing: r[6] || '', date: cleanDate(r[2]) || 'Nov 20',
                     bookedBy: 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
                 });
             } else if (sec === 'contacts') {
@@ -386,8 +451,6 @@ async function syncFromGoogleSheets(silent = false) {
         todoData = td;
         foodData = fd;
         contactsData = ct.length ? ct : [...INITIAL_CONTACTS];
-
-        // ✅ CLEAN SYNC: Do not resurrect deleted custom tabs from stale local cache
         customSections = custSec;
         customItemsData = custItems;
 
@@ -416,7 +479,6 @@ function pushDataToGoogleSheet() {
         ...todoData.map(x => ({ ...x, section: 'todo', notes: x.notes })),
         ...contactsData.map(x => ({ ...x, section: 'contacts', category: x.category, details: x.service, title: x.name, location: x.location, person: x.phone, notes: x.notes, status: 'Confirmed' })),
 
-        // Custom Tabs Metadata
         ...customSections.map(s => ({
             id: `meta_${s.id}`,
             section: 'meta_section',
@@ -433,7 +495,6 @@ function pushDataToGoogleSheet() {
             price: ''
         })),
 
-        // Custom Tab Items
         ...customItemsData.map(x => ({
             id: x.id,
             section: x.section,
@@ -542,10 +603,7 @@ function applyActiveTabVisibility() {
     renderCurrentTab();
 }
 
-// =========================================================================
-// ✅ FIXED TAB DELETION (NO SYNTAX ERROR, NO GHOST RESURRECTION)
-// =========================================================================
-
+// DYNAMIC CUSTOM SECTIONS ENGINE
 function openNewSectionModal() {
     document.getElementById('newSectionName').value = '';
     document.getElementById('newSectionModal').classList.remove('hidden');
@@ -576,14 +634,13 @@ function deleteCustomSection(secId) {
 
     if (!confirm(`Are you sure you want to delete the "${secName}" tab and all items inside it?`)) return;
 
-    // Remove from local arrays
     customSections = customSections.filter(s => s.id !== secId);
     customItemsData = customItemsData.filter(i => i.section !== secId);
 
     saveLocalState();
     switchTab('schedule');
     renderAll();
-    pushDataToGoogleSheet(); // Overwrite Google Sheet so it never resurrects!
+    pushDataToGoogleSheet();
 }
 
 function renderDynamicTabsAndSections() {
@@ -609,8 +666,11 @@ function renderDynamicTabsAndSections() {
                             <p class="text-[10px] text-slate-500">Custom target section</p>
                         </div>
                         <div class="flex items-center gap-2">
+                            <!-- Direct + Add button for this custom tab -->
+                            <button onclick="openRecordModal('${sec.id}')" class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-600 hover:bg-amber-500 text-white shadow-sm flex items-center gap-1">
+                                <i class="fa-solid fa-plus text-[8px]"></i> Add Item
+                            </button>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900" id="count-${sec.id}">0 Items</span>
-                            <!-- Clean delete trigger -->
                             <button onclick="deleteCustomSection('${sec.id}')" class="text-rose-500 hover:text-rose-700 text-xs p-1" title="Delete this tab">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
@@ -621,7 +681,7 @@ function renderDynamicTabsAndSections() {
                             <thead>
                                 <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                     <th class="p-2.5">Title / Item</th>
-                                    <th class="p-2.5">Category / Day</th>
+                                    <th class="p-2.5">Event Day</th>
                                     <th class="p-2.5">Details / Time</th>
                                     <th class="p-2.5">Location (Google Maps)</th>
                                     <th class="p-2.5">In-Charge</th>
@@ -637,6 +697,7 @@ function renderDynamicTabsAndSections() {
         `).join('');
     }
 
+    // Refresh modal dropdown options
     const formSelect = document.getElementById('formSection');
     if (formSelect) {
         const baseOptions = `
@@ -662,7 +723,7 @@ function renderCustomSectionTable(secId) {
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
 
-    let rows = customItemsData.filter(i => i.section === secId);
+    let rows = customItemsData.filter(i => i.section === secId && matchesDay(i, currentDayFilter));
 
     if (search) {
         rows = rows.filter(i => (i.title && i.title.toLowerCase().includes(search)) ||
@@ -671,14 +732,12 @@ function renderCustomSectionTable(secId) {
             (i.notes && i.notes.toLowerCase().includes(search)));
     }
 
-    // Time sort
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    rows = sortItemsChronologically(rows);
 
     const countBadge = document.getElementById(`count-${secId}`);
     if (countBadge) countBadge.innerText = `${rows.length} Items`;
 
-    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No items found in this section. Click "+ Add" to create one.</td></tr>` :
+    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No items found matching filter. Click "+ Add" to create one.</td></tr>` :
         rows.map(r => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5">
@@ -698,23 +757,16 @@ function renderCustomSectionTable(secId) {
         `).join('');
 }
 
-// =========================================================================
-// TABLE RENDERS (WITH COMPREHENSIVE TIME SORTING ON ALL TABS)
-// =========================================================================
-
+// STANDARD TABLES RENDERING
 function renderScheduleTable() {
     const tbody = document.getElementById('scheduleTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
 
-    let rows = scheduleData.filter(item => {
-        const dayMatch = currentDayFilter === 'all' || (item.date && item.date.includes(currentDayFilter));
-        const searchMatch = !search || (item.title && item.title.toLowerCase().includes(search)) || (item.person && item.person.toLowerCase().includes(search));
-        return dayMatch && searchMatch;
-    });
+    let rows = scheduleData.filter(item => matchesDay(item, currentDayFilter) &&
+        (!search || item.title.toLowerCase().includes(search) || item.person.toLowerCase().includes(search)));
 
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    rows = sortItemsChronologically(rows);
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No events found matching filter.</td></tr>` :
         rows.map(r => `
@@ -741,16 +793,10 @@ function renderFoodTable() {
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
 
-    let rows = foodData.filter(item => {
-        const dayMatch = currentDayFilter === 'all' || (item.date && item.date.includes(currentDayFilter));
-        const matchCaterer = (item.caterer || item.title || '').toLowerCase().includes(search);
-        const matchMeal = (item.mealType || item.time || '').toLowerCase().includes(search);
-        const matchMenu = (item.menu || '').toLowerCase().includes(search);
-        return dayMatch && (!search || matchCaterer || matchMeal || matchMenu);
-    });
+    let rows = foodData.filter(item => matchesDay(item, currentDayFilter) &&
+        (!search || item.caterer.toLowerCase().includes(search) || item.mealType.toLowerCase().includes(search) || (item.menu && item.menu.toLowerCase().includes(search))));
 
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    rows = sortItemsChronologically(rows);
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No meals found for this day.</td></tr>` :
         rows.map(r => `
@@ -776,12 +822,13 @@ function renderRoomsTable() {
     const tbody = document.getElementById('roomsTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-    let rows = roomsData.filter(i => !search || i.name.toLowerCase().includes(search) || i.details.toLowerCase().includes(search));
 
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.timing) - parseTimeToMinutes(b.timing));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.timing) - parseTimeToMinutes(a.timing));
+    let rows = roomsData.filter(item => matchesDay(item, currentDayFilter) &&
+        (!search || item.name.toLowerCase().includes(search) || item.details.toLowerCase().includes(search)));
 
-    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No rooms found.</td></tr>` :
+    rows = sortItemsChronologically(rows);
+
+    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No rooms found for this day.</td></tr>` :
         rows.map(r => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5 font-bold text-slate-800 dark:text-slate-100">
@@ -805,12 +852,13 @@ function renderVehiclesTable() {
     const tbody = document.getElementById('vehiclesTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-    let rows = vehiclesData.filter(i => !search || i.name.toLowerCase().includes(search) || i.model.toLowerCase().includes(search));
 
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.timing) - parseTimeToMinutes(b.timing));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.timing) - parseTimeToMinutes(a.timing));
+    let rows = vehiclesData.filter(item => matchesDay(item, currentDayFilter) &&
+        (!search || item.name.toLowerCase().includes(search) || item.model.toLowerCase().includes(search)));
 
-    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No vehicles found.</td></tr>` :
+    rows = sortItemsChronologically(rows);
+
+    tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="7" class="p-4 text-center text-slate-400">No vehicles found for this day.</td></tr>` :
         rows.map(r => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5 font-bold text-slate-800 dark:text-slate-100">${r.name}<span class="text-[10px] text-slate-400 block">${r.model}</span></td>
@@ -859,13 +907,9 @@ function renderTodoTable() {
     const tbody = document.getElementById('todoTableBody');
     if (!tbody) return;
     const search = (document.getElementById('searchInput').value || '').toLowerCase();
-    let rows = todoData.filter(item => {
-        const dayMatch = currentDayFilter === 'all' || (item.date && item.date.includes(currentDayFilter)) || (item.time && item.time.includes(currentDayFilter));
-        return dayMatch && (!search || item.title.toLowerCase().includes(search));
-    });
 
-    if (currentTimeSort === 'asc') rows.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') rows.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    let rows = todoData.filter(item => matchesDay(item, currentDayFilter) && (!search || item.title.toLowerCase().includes(search)));
+    rows = sortItemsChronologically(rows);
 
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="6" class="p-4 text-center text-slate-400">No to-do tasks found.</td></tr>` :
         rows.map(r => `
@@ -912,15 +956,10 @@ function renderContactsTable() {
         `).join('');
 }
 
-// 0. DAY-BY-DAY MASTER OVERVIEW (WITH TIME SORT)
+// 0. DAY-BY-DAY MASTER OVERVIEW
 function renderDayOverview() {
-    const day = currentDayFilter;
-    const filterFn = item => day === 'all' || (item.date && item.date.includes(day)) || (item.time && item.time.includes(day));
-
-    // 1. Events
-    let dayS = scheduleData.filter(filterFn);
-    if (currentTimeSort === 'asc') dayS.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') dayS.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    let dayS = scheduleData.filter(i => matchesDay(i, currentDayFilter));
+    dayS = sortItemsChronologically(dayS);
 
     document.getElementById('dayviewScheduleCount').innerText = `${dayS.length} Events`;
     document.getElementById('dayviewScheduleContainer').innerHTML = dayS.length === 0 ? `<p class="text-xs text-slate-400 py-2">No events scheduled for this day.</p>` :
@@ -934,10 +973,8 @@ function renderDayOverview() {
             </div>
         `).join('');
 
-    // 2. Food
-    let dayF = foodData.filter(i => day === 'all' || (i.date && i.date.includes(day)));
-    if (currentTimeSort === 'asc') dayF.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') dayF.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    let dayF = foodData.filter(i => matchesDay(i, currentDayFilter));
+    dayF = sortItemsChronologically(dayF);
 
     document.getElementById('dayviewFoodCount').innerText = `${dayF.length} Meals`;
     document.getElementById('dayviewFoodContainer').innerHTML = dayF.length === 0 ? `<p class="text-xs text-slate-400 py-2">No meals logged for this day.</p>` :
@@ -954,13 +991,11 @@ function renderDayOverview() {
             </div>
         `}).join('');
 
-    // 3. Rooms
-    let dayRm = [...roomsData];
-    if (currentTimeSort === 'asc') dayRm.sort((a, b) => parseTimeToMinutes(a.timing) - parseTimeToMinutes(b.timing));
-    else if (currentTimeSort === 'desc') dayRm.sort((a, b) => parseTimeToMinutes(b.timing) - parseTimeToMinutes(a.timing));
+    let dayRm = roomsData.filter(i => matchesDay(i, currentDayFilter));
+    dayRm = sortItemsChronologically(dayRm);
 
     document.getElementById('dayviewRoomsCount').innerText = `${dayRm.length} Bookings`;
-    document.getElementById('dayviewRoomsContainer').innerHTML = dayRm.length === 0 ? `<p class="text-xs text-slate-400 py-2">No rooms booked.</p>` :
+    document.getElementById('dayviewRoomsContainer').innerHTML = dayRm.length === 0 ? `<p class="text-xs text-slate-400 py-2">No rooms booked for this day.</p>` :
         dayRm.map(r => `
             <div class="py-1.5 flex items-start justify-between gap-1">
                 <div>
@@ -972,13 +1007,11 @@ function renderDayOverview() {
             </div>
         `).join('');
 
-    // 4. Vehicles
-    let dayVh = [...vehiclesData];
-    if (currentTimeSort === 'asc') dayVh.sort((a, b) => parseTimeToMinutes(a.timing) - parseTimeToMinutes(b.timing));
-    else if (currentTimeSort === 'desc') dayVh.sort((a, b) => parseTimeToMinutes(b.timing) - parseTimeToMinutes(a.timing));
+    let dayVh = vehiclesData.filter(i => matchesDay(i, currentDayFilter));
+    dayVh = sortItemsChronologically(dayVh);
 
     document.getElementById('dayviewVehiclesCount').innerText = `${dayVh.length} Vehicles`;
-    document.getElementById('dayviewVehiclesContainer').innerHTML = dayVh.length === 0 ? `<p class="text-xs text-slate-400 py-2">No vehicles booked.</p>` :
+    document.getElementById('dayviewVehiclesContainer').innerHTML = dayVh.length === 0 ? `<p class="text-xs text-slate-400 py-2">No vehicles booked for this day.</p>` :
         dayVh.map(v => `
             <div class="py-1.5 flex items-start justify-between gap-1">
                 <div>
@@ -990,10 +1023,8 @@ function renderDayOverview() {
             </div>
         `).join('');
 
-    // 5. To-Do
-    let dayT = todoData.filter(filterFn);
-    if (currentTimeSort === 'asc') dayT.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
-    else if (currentTimeSort === 'desc') dayT.sort((a, b) => parseTimeToMinutes(b.time) - parseTimeToMinutes(a.time));
+    let dayT = todoData.filter(i => matchesDay(i, currentDayFilter));
+    dayT = sortItemsChronologically(dayT);
 
     document.getElementById('dayviewTodoCount').innerText = `${dayT.length} Tasks`;
     document.getElementById('dayviewTodoContainer').innerHTML = dayT.length === 0 ? `<p class="text-xs text-slate-400 py-2">No to-dos for this day.</p>` :
@@ -1052,7 +1083,9 @@ function renderCurrentTab() {
     else if (activeTab.startsWith('custom_')) renderCustomSectionTable(activeTab);
 }
 
-// MODAL ADD / EDIT LOGIC
+// =========================================================================
+// ✅ ADJUST FORM FIELDS (NOW WITH PROPER DAY DROPDOWN FOR CUSTOM TABS!)
+// =========================================================================
 function adjustFormFieldsBySection() {
     const sec = document.getElementById('formSection').value;
     const lblTitle = document.getElementById('lblTitle');
@@ -1071,15 +1104,22 @@ function adjustFormFieldsBySection() {
     if (colStatus) colStatus.classList.remove('hidden');
 
     if (sec.startsWith('custom_')) {
+        // ✅ CUSTOM TAB NOW HAS THE PROPER DAY SELECTION DROPDOWN!
         const customSecObj = customSections.find(s => s.id === sec);
-        lblTitle.innerText = `${customSecObj ? customSecObj.name : 'Item'} Title / Name`;
-        lblDateOrCat.innerText = 'Category / Tag';
-        dateWrapper.innerHTML = `<input type="text" id="formDate" placeholder="e.g. Stage 1, Priority" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">`;
+        lblTitle.innerText = `${customSecObj ? customSecObj.name : 'Item'} Title / Activity`;
+        lblDateOrCat.innerText = 'Event Day';
+        dateWrapper.innerHTML = `
+            <select id="formDate" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                <option value="Nov 19">Nov 19 (Day 1)</option>
+                <option value="Nov 20" selected>Nov 20 (Day 2)</option>
+                <option value="Nov 21">Nov 21 (Day 3)</option>
+                <option value="All Days">All Days / General</option>
+            </select>`;
         lblTime.innerText = 'Time / Specifics / Rate';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
         document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
-        document.getElementById('lblTransport').innerText = 'Extra Tag / Details';
+        document.getElementById('lblTransport').innerText = 'Category / Sub-Tag';
         lblPerson.innerText = 'In-Charge Person & Phone';
     } else if (sec === 'contacts') {
         lblTitle.innerText = 'Contact Name & Title';
@@ -1118,8 +1158,13 @@ function adjustFormFieldsBySection() {
         lblPerson.innerText = 'Booked By / Contact';
     } else if (sec === 'rooms') {
         lblTitle.innerText = 'Hotel / Room Name';
-        lblDateOrCat.innerText = 'City';
-        dateWrapper.innerHTML = `<input type="text" id="formDate" placeholder="Sivakasi / Virudhunagar" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">`;
+        lblDateOrCat.innerText = 'Event Day';
+        dateWrapper.innerHTML = `
+            <select id="formDate" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                <option value="Nov 19">Nov 19 (Day 1)</option>
+                <option value="Nov 20" selected>Nov 20 (Day 2)</option>
+                <option value="Nov 21">Nov 21 (Day 3)</option>
+            </select>`;
         lblTime.innerText = 'Room Tariff & Details (e.g. ₹2200+GST)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
@@ -1128,8 +1173,14 @@ function adjustFormFieldsBySection() {
         lblPerson.innerText = 'Hotel Phone Number';
     } else if (sec === 'vehicles') {
         lblTitle.innerText = 'Travels & Vehicle Model';
-        lblDateOrCat.innerText = 'Driver City';
-        dateWrapper.innerHTML = `<input type="text" id="formDate" placeholder="Sivakasi / Virudhunagar" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">`;
+        lblDateOrCat.innerText = 'Booking Day';
+        dateWrapper.innerHTML = `
+            <select id="formDate" class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                <option value="Nov 18">Nov 18</option>
+                <option value="Nov 19">Nov 19</option>
+                <option value="Nov 20" selected>Nov 20</option>
+                <option value="Nov 21">Nov 21</option>
+            </select>`;
         lblTime.innerText = 'Rent & Rate (e.g. ₹3000/day + ₹13/KM)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
@@ -1182,16 +1233,47 @@ function adjustFormFieldsBySection() {
     }
 }
 
+// =========================================================================
+// ✅ OPEN RECORD MODAL (LOCKS TO CURRENT TAB & DISPLAYS EXACT TARGET NAME)
+// =========================================================================
 function openRecordModal(sectionToPreselect) {
     document.getElementById('recordForm').reset();
     document.getElementById('formRecordId').value = '';
     if (document.getElementById('formMenu')) document.getElementById('formMenu').value = '';
     if (document.getElementById('formNotes')) document.getElementById('formNotes').value = '';
-    document.getElementById('recordModalTitle').innerText = 'Add Record';
 
-    const target = sectionToPreselect || (activeTab === 'dayview' ? 'schedule' : activeTab);
+    // Determine target section accurately (Never silently defaults to schedule)
+    let target = sectionToPreselect;
+    if (!target) {
+        if (activeTab === 'dayview') {
+            target = 'schedule';
+        } else {
+            target = activeTab;
+        }
+    }
+
     const select = document.getElementById('formSection');
-    if (select) select.value = target;
+    if (select) {
+        select.value = target;
+        // If option was not found, fallback safely to first custom or schedule
+        if (select.value !== target) {
+            select.value = target;
+        }
+    }
+
+    // Update modal title so you always see where the item is being added!
+    const secNameMap = {
+        'schedule': 'Event Agenda',
+        'food': 'Food & Catering',
+        'rooms': 'Rooms',
+        'vehicles': 'Vehicles',
+        'shopping': 'Pooja List',
+        'todo': 'To-Do',
+        'contacts': 'Contact Directory'
+    };
+    const customSec = customSections.find(s => s.id === target);
+    const displayName = customSec ? customSec.name : (secNameMap[target] || 'Event Agenda');
+    document.getElementById('recordModalTitle').innerText = `Add Record to: ${displayName}`;
 
     adjustFormFieldsBySection();
     document.getElementById('recordModal').classList.remove('hidden');
@@ -1214,7 +1296,7 @@ function editRecord(id, sec) {
 
     document.getElementById('formTitle').value = item.title || item.name || item.caterer || '';
     const dateEl = document.getElementById('formDate');
-    if (dateEl) dateEl.value = item.date || item.category || item.location || 'Nov 20';
+    if (dateEl) dateEl.value = item.date || item.category || 'Nov 20';
 
     document.getElementById('formTimeOrDetails').value = item.mealType || item.time || item.details || item.rate || item.service || '';
     if (document.getElementById('formLocation')) document.getElementById('formLocation').value = item.location || item.phone || item.place || '';
@@ -1261,7 +1343,7 @@ function handleSaveRecord(e) {
 
     if (sec.startsWith('custom_')) {
         newObj.title = title;
-        newObj.date = dateOrCat;
+        newObj.date = dateOrCat; // Now correctly saves Nov 19, Nov 20, or Nov 21!
         newObj.time = timeOrDetails;
         newObj.location = location;
         newObj.transport = transport;
@@ -1281,11 +1363,11 @@ function handleSaveRecord(e) {
         newObj.time = timeOrDetails; newObj.place = location; newObj.headcount = transport;
         newObj.contactPerson = person; newObj.menu = menu || 'Custom Feast Menu';
     } else if (sec === 'rooms') {
-        newObj.name = title; newObj.location = location || dateOrCat; newObj.details = timeOrDetails;
-        newObj.phone = person || location; newObj.timing = transport; newObj.bookedBy = 'Arunkumar';
+        newObj.name = title; newObj.location = location; newObj.details = timeOrDetails;
+        newObj.phone = person; newObj.timing = transport; newObj.date = dateOrCat; newObj.bookedBy = 'Arunkumar';
     } else if (sec === 'vehicles') {
-        newObj.name = title; newObj.model = title; newObj.location = location || dateOrCat; newObj.rate = timeOrDetails;
-        newObj.phone = person; newObj.timing = transport; newObj.contactPerson = person; newObj.bookedBy = 'Arunkumar';
+        newObj.name = title; newObj.model = title; newObj.location = location; newObj.rate = timeOrDetails;
+        newObj.phone = person; newObj.timing = transport; newObj.date = dateOrCat; newObj.contactPerson = person; newObj.bookedBy = 'Arunkumar';
     } else if (sec === 'shopping') {
         newObj.title = title; newObj.category = dateOrCat; newObj.notes = notes || timeOrDetails; newObj.person = person;
     } else if (sec === 'todo') {
