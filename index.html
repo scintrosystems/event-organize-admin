@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <!-- Quick Actions: Theme & Sync -->
+            <!-- Quick Actions -->
             <div class="flex items-center space-x-1.5 shrink-0">
                 <button onclick="toggleDarkMode()"
                     class="p-1.5 text-xs rounded-lg bg-amber-700/80 hover:bg-amber-700 transition" title="Toggle Theme">
@@ -121,8 +121,9 @@
 
         <!-- Navigation Tabs & Toolbar -->
         <div class="glass-card p-2.5 sm:p-3 rounded-xl border space-y-2.5 shadow-sm">
+            <!-- Tabs Bar (With Dynamic Custom Sections Container + "+ New Tab" Button) -->
             <div
-                class="flex space-x-1 sm:space-x-1.5 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200 dark:border-slate-700">
+                class="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto pb-1 scrollbar-none border-b border-slate-200 dark:border-slate-700">
                 <button onclick="switchTab('dayview')" id="tab-dayview"
                     class="tab-btn px-2.5 py-1.5 text-xs font-bold rounded-lg whitespace-nowrap bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
                     Day-by-Day Master
@@ -155,9 +156,19 @@
                     class="tab-btn px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
                     <i class="fa-solid fa-address-book mr-1 text-emerald-600"></i> Contact List
                 </button>
+
+                <!-- DYNAMIC CUSTOM TABS CONTAINER -->
+                <div id="dynamicTabButtonsContainer" class="flex space-x-1 sm:space-x-1.5"></div>
+
+                <!-- ✅ "+ NEW TAB / SECTION" BUTTON -->
+                <button onclick="openNewSectionModal()"
+                    class="px-2.5 py-1 text-xs font-bold rounded-lg border-2 border-dashed border-amber-500 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/60 flex items-center gap-1 shrink-0 transition"
+                    title="Add a completely new custom tab / target section">
+                    <i class="fa-solid fa-plus text-[10px]"></i> New Tab
+                </button>
             </div>
 
-            <!-- Search Bar & Add Button -->
+            <!-- Search Bar & Add Item Button -->
             <div class="flex items-center gap-1.5">
                 <div class="relative flex-1">
                     <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
@@ -171,27 +182,39 @@
                 </button>
             </div>
 
-            <!-- Common Day Filter Bar -->
-            <div class="flex items-center gap-1 pt-1.5 border-t border-slate-200 dark:border-slate-700 overflow-x-auto">
-                <span class="text-[11px] font-bold text-slate-500 shrink-0 mr-1">Day:</span>
-                <button onclick="filterByDay('all')" id="btnDay-all"
-                    class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-600 text-white shrink-0 shadow-sm">All
-                    Days</button>
-                <button onclick="filterByDay('Nov 19')" id="btnDay-Nov19"
-                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
-                    19</button>
-                <button onclick="filterByDay('Nov 20')" id="btnDay-Nov20"
-                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
-                    20</button>
-                <button onclick="filterByDay('Nov 21')" id="btnDay-Nov21"
-                    class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
-                    21</button>
+            <!-- Common Filter Bar: Day Filter + TIME-WISE SORTING -->
+            <div
+                class="flex items-center justify-between gap-1 pt-1.5 border-t border-slate-200 dark:border-slate-700 overflow-x-auto">
+                <!-- Day Filter -->
+                <div class="flex items-center gap-1 shrink-0">
+                    <span class="text-[11px] font-bold text-slate-500 mr-1">Day:</span>
+                    <button onclick="filterByDay('all')" id="btnDay-all"
+                        class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-600 text-white shrink-0 shadow-sm">All
+                        Days</button>
+                    <button onclick="filterByDay('Nov 19')" id="btnDay-Nov19"
+                        class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                        19</button>
+                    <button onclick="filterByDay('Nov 20')" id="btnDay-Nov20"
+                        class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                        20</button>
+                    <button onclick="filterByDay('Nov 21')" id="btnDay-Nov21"
+                        class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">Nov
+                        21</button>
+                </div>
+
+                <!-- Time-wise sorting toggle -->
+                <div class="flex items-center gap-1 shrink-0 ml-auto">
+                    <span class="text-[11px] font-bold text-slate-500 mr-1">Time:</span>
+                    <button onclick="toggleTimeSort()" id="btnTimeSort"
+                        class="px-2 py-0.5 text-[11px] font-semibold rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-100 flex items-center gap-1 transition">
+                        <i class="fa-solid fa-arrow-down-short-wide text-[10px]"></i>
+                        <span id="timeSortLabel">Default</span>
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 0. DAY-BY-DAY MASTER OVERVIEW (WITH SEPARATED ROOMS & VEHICLES)           -->
-        <!-- ========================================================================= -->
+        <!-- 0. DAY-BY-DAY MASTER OVERVIEW SECTION -->
         <section id="sec-dayview" class="hidden space-y-3">
             <div
                 class="glass-card p-2.5 sm:p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm bg-gradient-to-r from-amber-500/10 to-transparent">
@@ -203,7 +226,7 @@
                                 20</span></span>
                     </h2>
                     <p class="text-[10px] text-slate-500">Live agenda, Appans Hotel meals, lodging, vehicles & to-dos
-                        for this day</p>
+                    </p>
                 </div>
                 <div class="flex items-center gap-1 overflow-x-auto pb-0.5">
                     <button onclick="filterByDay('Nov 19')"
@@ -221,14 +244,11 @@
                 </div>
             </div>
 
-            <!-- 5 Dedicated Blocks for Master Day View -->
+            <!-- 5 Blocks -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <!-- 1. Event Agenda -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1">
-                            <i class="fa-solid fa-om text-amber-600"></i> Event Agenda
-                        </h3>
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Event Agenda</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
                             id="dayviewScheduleCount">0 Events</span>
                     </div>
@@ -237,12 +257,9 @@
                     </div>
                 </div>
 
-                <!-- 2. Food & Catering (Appans Hotel) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-amber-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1">
-                            <i class="fa-solid fa-utensils text-amber-600"></i> Food (Appans Hotel)
-                        </h3>
+                        <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">Food (Appans Hotel)</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900"
                             id="dayviewFoodCount">0 Meals</span>
                     </div>
@@ -251,12 +268,9 @@
                     </div>
                 </div>
 
-                <!-- 3. Rooms & Lodging (SEPARATED!) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-blue-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1">
-                            <i class="fa-solid fa-hotel text-blue-600"></i> Rooms & Lodging
-                        </h3>
+                        <h3 class="text-xs font-bold text-blue-900 dark:text-blue-300">Rooms & Lodging</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-200 text-blue-900"
                             id="dayviewRoomsCount">0 Rooms</span>
                     </div>
@@ -265,12 +279,9 @@
                     </div>
                 </div>
 
-                <!-- 4. Vehicles & Drivers (SEPARATED!) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                     <div class="p-2.5 bg-emerald-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1">
-                            <i class="fa-solid fa-taxi text-emerald-600"></i> Vehicles & Drivers
-                        </h3>
+                        <h3 class="text-xs font-bold text-emerald-900 dark:text-emerald-300">Vehicles & Drivers</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-900"
                             id="dayviewVehiclesCount">0 Vehicles</span>
                     </div>
@@ -279,12 +290,9 @@
                     </div>
                 </div>
 
-                <!-- 5. To-Do Tasks (Spans 2 columns on larger screens) -->
                 <div class="glass-card rounded-xl border overflow-hidden shadow-sm md:col-span-2">
                     <div class="p-2.5 bg-rose-50 dark:bg-slate-800/90 border-b flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1">
-                            <i class="fa-solid fa-clipboard-check text-rose-600"></i> To-Do Tasks For This Day
-                        </h3>
+                        <h3 class="text-xs font-bold text-rose-900 dark:text-rose-300">To-Do Tasks</h3>
                         <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-200 text-rose-900"
                             id="dayviewTodoCount">0 Tasks</span>
                     </div>
@@ -303,12 +311,12 @@
                     <span class="text-[10px] text-slate-500">Tap status to cycle</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[560px]">
+                    <table class="w-full text-left text-xs min-w-[580px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Date & Time</th>
                                 <th class="p-2.5">Activity / Event</th>
-                                <th class="p-2.5">Location</th>
+                                <th class="p-2.5">Location (Google Maps)</th>
                                 <th class="p-2.5">Transport</th>
                                 <th class="p-2.5">In-Charge</th>
                                 <th class="p-2.5">Status</th>
@@ -329,11 +337,11 @@
                     <span class="text-[10px] font-bold text-amber-600">Sivakasi</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[580px]">
+                    <table class="w-full text-left text-xs min-w-[600px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Meal & Timing</th>
-                                <th class="p-2.5">Caterer</th>
+                                <th class="p-2.5">Caterer & Location</th>
                                 <th class="p-2.5">Menu</th>
                                 <th class="p-2.5">Headcount</th>
                                 <th class="p-2.5">Contact</th>
@@ -347,7 +355,7 @@
             </div>
         </section>
 
-        <!-- 3. Rooms Section (Dedicated Separate Tab) -->
+        <!-- 3. Rooms Section -->
         <section id="sec-rooms" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
@@ -356,11 +364,11 @@
                     <span class="text-[10px] text-slate-500">Tap phone to call</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[560px]">
+                    <table class="w-full text-left text-xs min-w-[580px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Hotel Name</th>
-                                <th class="p-2.5">Location</th>
+                                <th class="p-2.5">Location (Google Maps)</th>
                                 <th class="p-2.5">Room Details & Tariff</th>
                                 <th class="p-2.5">Check-in / Check-out</th>
                                 <th class="p-2.5">Booked By</th>
@@ -374,7 +382,7 @@
             </div>
         </section>
 
-        <!-- 4. Vehicles Section (Dedicated Separate Tab) -->
+        <!-- 4. Vehicles Section -->
         <section id="sec-vehicles" class="hidden space-y-3">
             <div class="glass-card rounded-xl border overflow-hidden shadow-sm">
                 <div class="p-2.5 bg-slate-50/80 dark:bg-slate-800/80 border-b flex justify-between items-center">
@@ -383,14 +391,14 @@
                     <span class="text-[10px] text-slate-500">Tap phone to call driver</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[580px]">
+                    <table class="w-full text-left text-xs min-w-[600px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Travels & Vehicle</th>
                                 <th class="p-2.5">Driver / Contact</th>
+                                <th class="p-2.5">Location</th>
                                 <th class="p-2.5">Rate & Pricing</th>
                                 <th class="p-2.5">Timing & Route</th>
-                                <th class="p-2.5">Booked By</th>
                                 <th class="p-2.5">Status</th>
                                 <th class="p-2.5 text-right">Actions</th>
                             </tr>
@@ -408,7 +416,7 @@
                     <h2 class="text-xs font-bold">Pooja Items & Shopping</h2>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[540px]">
+                    <table class="w-full text-left text-xs min-w-[560px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Category</th>
@@ -433,11 +441,12 @@
                     <span class="text-[10px] text-rose-500 font-semibold">Priority check</span>
                 </div>
                 <div class="overflow-x-auto touch-scroll">
-                    <table class="w-full text-left text-xs min-w-[500px]">
+                    <table class="w-full text-left text-xs min-w-[540px]">
                         <thead>
                             <tr class="bg-slate-100 text-slate-500 uppercase text-[10px] tracking-wider border-b">
                                 <th class="p-2.5">Task Description</th>
-                                <th class="p-2.5">Deadline</th>
+                                <th class="p-2.5">Deadline / Day</th>
+                                <th class="p-2.5">Notes</th>
                                 <th class="p-2.5">Person</th>
                                 <th class="p-2.5">Status</th>
                                 <th class="p-2.5 text-right">Actions</th>
@@ -458,6 +467,7 @@
                             class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                             <i class="fa-solid fa-address-book text-emerald-600"></i> Master Contact Directory
                         </h2>
+                        <p class="text-[10px] text-slate-500">Tap phone numbers to call directly</p>
                     </div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900"
                         id="contactDirectoryCount">0 Contacts</span>
@@ -469,7 +479,7 @@
                                 <th class="p-2.5">Category</th>
                                 <th class="p-2.5">Contact Name & Role</th>
                                 <th class="p-2.5">Phone Number</th>
-                                <th class="p-2.5">Location / City</th>
+                                <th class="p-2.5">Location (Google Maps)</th>
                                 <th class="p-2.5">Service Details / Notes</th>
                                 <th class="p-2.5 text-right">Actions</th>
                             </tr>
@@ -480,9 +490,14 @@
             </div>
         </section>
 
+        <!-- ========================================================================= -->
+        <!-- ✅ DYNAMIC CUSTOM SECTIONS CONTAINER (RENDERED FROM JAVASCRIPT)          -->
+        <!-- ========================================================================= -->
+        <div id="dynamicSectionsContainer"></div>
+
     </main>
 
-    <!-- Modal Form -->
+    <!-- Modal 1: Add/Edit Record Modal (Handles Standard & Dynamic Custom Sections) -->
     <div id="recordModal"
         class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2.5">
         <div
@@ -496,7 +511,7 @@
                 <input type="hidden" id="formRecordId">
 
                 <div>
-                    <label class="block font-semibold mb-1">Target Section</label>
+                    <label class="block font-semibold mb-1">Target Section / Tab</label>
                     <select id="formSection" onchange="adjustFormFieldsBySection()"
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
                         <option value="schedule">1. Event Agenda</option>
@@ -506,6 +521,7 @@
                         <option value="shopping">5. Pooja List</option>
                         <option value="todo">6. To-Do Tasks</option>
                         <option value="contacts">7. Contact Directory</option>
+                        <!-- Dynamic custom sections options injected here automatically! -->
                     </select>
                 </div>
 
@@ -536,7 +552,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block font-semibold mb-1" id="lblTimeOrDetails">Time / Details / Tariff</label>
+                        <label class="block font-semibold mb-1" id="lblTimeOrDetails">Time / Tariff / Details</label>
                         <input type="text" id="formTimeOrDetails"
                             class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                     </div>
@@ -544,7 +560,7 @@
 
                 <div class="grid grid-cols-2 gap-2" id="groupLocationTransport">
                     <div id="colLocation">
-                        <label class="block font-semibold mb-1" id="lblLocation">Location / City</label>
+                        <label class="block font-semibold mb-1" id="lblLocation">Location (Place / City)</label>
                         <input type="text" id="formLocation"
                             class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                     </div>
@@ -555,12 +571,22 @@
                     </div>
                 </div>
 
-                <div>
+                <div id="colPerson">
                     <label class="block font-semibold mb-1" id="lblPerson">Contact Person & Phone</label>
-                    <input type="text" id="formPerson" required
+                    <input type="text" id="formPerson"
                         class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none">
                 </div>
 
+                <!-- UNIVERSAL EXTRA NOTES -->
+                <div>
+                    <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">
+                        <i class="fa-regular fa-note-sticky mr-1 text-amber-500"></i>Extra Notes
+                    </label>
+                    <textarea id="formNotes" rows="2" placeholder="Any additional notes, instructions, or specifics..."
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium text-xs"></textarea>
+                </div>
+
+                <!-- Status (Hidden for contacts) -->
                 <div id="colStatus">
                     <label class="block font-semibold mb-1">Status</label>
                     <select id="formStatus"
@@ -578,6 +604,41 @@
                         class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700">Cancel</button>
                     <button type="submit"
                         class="px-4 py-1.5 font-bold rounded-lg bg-amber-600 text-white shadow">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Modal 2: Create Brand New Tab / Section Modal -->
+    <div id="newSectionModal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-2.5">
+        <div class="bg-white dark:bg-slate-800 rounded-xl max-w-sm w-full p-4 shadow-2xl border space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-xs sm:text-sm font-bold flex items-center gap-1.5 text-amber-600">
+                    <i class="fa-solid fa-folder-plus"></i> Create New Tab / Section
+                </h3>
+                <button onclick="closeNewSectionModal()"
+                    class="text-slate-400 hover:text-slate-600 text-base">✕</button>
+            </div>
+
+            <form onsubmit="handleCreateSection(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold mb-1">Section / Tab Name</label>
+                    <input type="text" id="newSectionName" required
+                        placeholder="e.g. Photography, Gifts, Music, Expenses"
+                        class="w-full p-2 bg-slate-100 dark:bg-slate-900 border rounded-lg outline-none font-medium">
+                </div>
+
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    This will create a new tab at the top and add it to your Target Section dropdown so you can add,
+                    edit, and delete items inside it.
+                </p>
+
+                <div class="flex justify-end space-x-2 pt-2 border-t">
+                    <button type="button" onclick="closeNewSectionModal()"
+                        class="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700">Cancel</button>
+                    <button type="submit" class="px-4 py-1.5 font-bold rounded-lg bg-amber-600 text-white shadow">Create
+                        Tab</button>
                 </div>
             </form>
         </div>
