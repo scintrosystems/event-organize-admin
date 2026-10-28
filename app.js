@@ -176,10 +176,13 @@ function extractPhone(text) {
     return match ? match[0] : '';
 }
 
-function formatLocationLink(loc) {
+function formatLocationLink(loc, mapUrl) {
     if (!loc || loc === '—') return '—';
-    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`;
-    return `<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="text-rose-600 dark:text-rose-400 font-semibold hover:underline inline-flex items-center gap-1 group" title="Open in Google Maps">
+    const destination = (mapUrl && mapUrl.startsWith('http'))
+        ? mapUrl
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`;
+
+    return `<a href="${destination}" target="_blank" rel="noopener noreferrer" class="text-rose-600 dark:text-rose-400 font-semibold hover:underline inline-flex items-center gap-1 group" title="Open in Google Maps">
         <i class="fa-solid fa-location-dot text-rose-500 text-[10px] group-hover:scale-125 transition"></i>
         <span>${loc}</span>
         <i class="fa-solid fa-arrow-up-right-from-square text-[8px] opacity-70"></i>
@@ -348,7 +351,9 @@ function cleanTime(val) {
     return str;
 }
 
-// GOOGLE SHEETS LIVE SYNC
+// =========================================================================
+// ✅ FIXED GOOGLE SHEETS LIVE SYNC (READS COLUMN 12 FOR NOTES ON ALL TABS)
+// =========================================================================
 async function syncFromGoogleSheets(silent = false) {
     if (!GOOGLE_SHEET_URL || !GOOGLE_SHEET_URL.startsWith("https://")) return;
 
@@ -401,40 +406,42 @@ async function syncFromGoogleSheets(silent = false) {
             seenIds.add(id);
 
             const sec = String(r[1] || 'schedule').toLowerCase().trim();
+            // ✅ Read Column 12 (Index 11) for Notes across all sections!
+            const noteText = r[11] || '';
 
             if (sec === 'meta_section') {
                 custSec.push({ id: String(r[2]), name: r[4] });
             } else if (sec.startsWith('custom_')) {
                 custItems.push({
                     id, section: sec, title: r[4] || '', date: r[2] || '', time: r[3] || '',
-                    location: r[5] || '', transport: r[6] || '', person: r[7] || '', status: r[8] || 'Confirmed', notes: r[11] || r[9] || ''
+                    location: r[5] || '', transport: r[6] || '', person: r[7] || '', status: r[8] || 'Confirmed', notes: noteText
                 });
             } else if (sec === 'food') {
                 fd.push({
                     id, section: 'food', date: cleanDate(r[2]) || 'Nov 20', time: cleanTime(r[3]), mealType: r[3] || 'Meal',
                     caterer: r[4] || 'Appans Hotel', place: r[5] || 'Sivakasi', bookedBy: r[6], contactPerson: r[7],
-                    status: r[8] || 'Confirmed', menu: r[9], headcount: r[10] || '40 Max', notes: r[11] || ''
+                    status: r[8] || 'Confirmed', menu: r[9], headcount: r[10] || '40 Max', notes: noteText
                 });
             } else if (sec === 'rooms' || (sec === 'logistics' && String(r[2]).includes('Room'))) {
                 rm.push({
                     id, section: 'rooms', name: r[4] || 'Hotel', location: r[5] || 'Sivakasi', phone: extractPhone(r[3]),
-                    details: r[3] || '', timing: r[6] || '', date: cleanDate(r[2]) || 'Nov 19', bookedBy: r[7] || 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
+                    details: r[3] || '', timing: r[6] || '', date: cleanDate(r[2]) || 'Nov 19', bookedBy: r[7] || 'Arunkumar', status: r[8] || 'Confirmed', notes: noteText
                 });
             } else if (sec === 'vehicles' || (sec === 'logistics' && String(r[2]).includes('Vehicle'))) {
                 vh.push({
                     id, section: 'vehicles', name: r[4] || 'Travels', model: r[4], contactPerson: r[7] || '',
                     phone: extractPhone(r[3]), location: r[5] || '', rate: r[3] || '', timing: r[6] || '', date: cleanDate(r[2]) || 'Nov 20',
-                    bookedBy: 'Arunkumar', status: r[8] || 'Confirmed', notes: r[9] || ''
+                    bookedBy: 'Arunkumar', status: r[8] || 'Confirmed', notes: noteText
                 });
             } else if (sec === 'contacts') {
                 ct.push({
                     id, section: 'contacts', category: r[2] || 'Coordinator', service: r[3] || '',
-                    name: r[4] || '', location: r[5] || '', phone: r[7] || '—', notes: r[9] || ''
+                    name: r[4] || '', location: r[5] || '', phone: r[7] || '—', notes: noteText
                 });
             } else {
                 const item = {
                     id, section: sec, date: cleanDate(r[2]) || r[2], category: r[2] || '',
-                    time: cleanTime(r[3]) || r[3], details: r[3] || '', notes: r[9] || r[3] || '',
+                    time: cleanTime(r[3]) || r[3], details: r[3] || '', notes: noteText || (sec === 'shopping' ? r[3] : ''),
                     title: r[4] || '', name: r[4] || '', location: r[5] || '', transport: r[6] || '',
                     person: r[7] || '', status: r[8] || 'Scheduled'
                 };
@@ -467,17 +474,20 @@ async function syncFromGoogleSheets(silent = false) {
     }
 }
 
+// =========================================================================
+// ✅ FIXED GOOGLE SHEETS PUSH (PASSES NOTES TO COLUMN 12 FOR EVERY TAB)
+// =========================================================================
 function pushDataToGoogleSheet() {
     if (!GOOGLE_SHEET_URL || !GOOGLE_SHEET_URL.startsWith("https://")) return;
 
     const payload = [
-        ...scheduleData.map(x => ({ ...x, section: 'schedule', notes: x.notes })),
-        ...roomsData.map(x => ({ ...x, section: 'rooms', category: 'Room Stay', title: x.name, details: x.details, location: x.location, transport: x.timing, person: x.phone, notes: x.notes, status: x.status })),
-        ...vehiclesData.map(x => ({ ...x, section: 'vehicles', category: 'Vehicle', title: x.name, details: x.rate, location: x.location, transport: x.timing, person: x.phone, notes: x.notes, status: x.status })),
-        ...foodData.map(x => ({ ...x, section: 'food', notes: x.notes })),
-        ...shoppingData.map(x => ({ ...x, section: 'shopping', notes: x.notes })),
-        ...todoData.map(x => ({ ...x, section: 'todo', notes: x.notes })),
-        ...contactsData.map(x => ({ ...x, section: 'contacts', category: x.category, details: x.service, title: x.name, location: x.location, person: x.phone, notes: x.notes, status: 'Confirmed' })),
+        ...scheduleData.map(x => ({ ...x, section: 'schedule', notes: x.notes || '', price: x.notes || '' })),
+        ...roomsData.map(x => ({ ...x, section: 'rooms', category: 'Room Stay', title: x.name, details: x.details, location: x.location, transport: x.timing, person: x.phone, notes: x.notes || '', price: x.notes || '', status: x.status })),
+        ...vehiclesData.map(x => ({ ...x, section: 'vehicles', category: 'Vehicle', title: x.name, details: x.rate, location: x.location, transport: x.timing, person: x.phone, notes: x.notes || '', price: x.notes || '', status: x.status })),
+        ...foodData.map(x => ({ ...x, section: 'food', notes: x.notes || '', price: x.notes || '' })),
+        ...shoppingData.map(x => ({ ...x, section: 'shopping', notes: x.notes || '', price: x.notes || '' })),
+        ...todoData.map(x => ({ ...x, section: 'todo', notes: x.notes || '', price: x.notes || '' })),
+        ...contactsData.map(x => ({ ...x, section: 'contacts', category: x.category, details: x.service, title: x.name, location: x.location, person: x.phone, notes: x.notes || '', price: x.notes || '', status: 'Confirmed' })),
 
         ...customSections.map(s => ({
             id: `meta_${s.id}`,
@@ -491,8 +501,8 @@ function pushDataToGoogleSheet() {
             transport: '',
             person: '',
             status: 'Active',
-            notes: '',
-            price: ''
+            notes: s.notes || '',
+            price: s.notes || ''
         })),
 
         ...customItemsData.map(x => ({
@@ -666,7 +676,6 @@ function renderDynamicTabsAndSections() {
                             <p class="text-[10px] text-slate-500">Custom target section</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <!-- Direct + Add button for this custom tab -->
                             <button onclick="openRecordModal('${sec.id}')" class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-600 hover:bg-amber-500 text-white shadow-sm flex items-center gap-1">
                                 <i class="fa-solid fa-plus text-[8px]"></i> Add Item
                             </button>
@@ -697,7 +706,6 @@ function renderDynamicTabsAndSections() {
         `).join('');
     }
 
-    // Refresh modal dropdown options
     const formSelect = document.getElementById('formSection');
     if (formSelect) {
         const baseOptions = `
@@ -746,7 +754,7 @@ function renderCustomSectionTable(secId) {
                 </td>
                 <td class="p-2.5"><span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-slate-200 dark:bg-slate-700">${r.date || '—'}</span></td>
                 <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">${r.time || '—'}</td>
-                <td class="p-2.5">${formatLocationLink(r.location)}</td>
+                <td class="p-2.5">${formatLocationLink(r.location, r.mapLink)}</td>
                 <td class="p-2.5 font-medium text-slate-700 dark:text-slate-300">${r.person || '—'}</td>
                 <td class="p-2.5">${getStatusBadge(r.status, r.id, r.section)}</td>
                 <td class="p-2.5 text-right whitespace-nowrap">
@@ -757,7 +765,7 @@ function renderCustomSectionTable(secId) {
         `).join('');
 }
 
-// STANDARD TABLES RENDERING
+// 1. EVENT AGENDA TABLE
 function renderScheduleTable() {
     const tbody = document.getElementById('scheduleTableBody');
     if (!tbody) return;
@@ -776,7 +784,7 @@ function renderScheduleTable() {
                     <span class="font-semibold text-slate-800 dark:text-slate-100 block">${r.title}</span>
                     ${r.notes ? `<span class="text-[10px] text-slate-500 italic block mt-0.5"><i class="fa-solid fa-note-sticky text-[8px] text-amber-500 mr-1"></i>${r.notes}</span>` : ''}
                 </td>
-                <td class="p-2.5">${formatLocationLink(r.location)}</td>
+                <td class="p-2.5">${formatLocationLink(r.location, r.mapLink)}</td>
                 <td class="p-2.5 text-slate-600 dark:text-slate-300">${r.transport}</td>
                 <td class="p-2.5 font-medium text-slate-700 dark:text-slate-300">${r.person}</td>
                 <td class="p-2.5">${getStatusBadge(r.status, r.id, 'schedule')}</td>
@@ -788,6 +796,7 @@ function renderScheduleTable() {
         `).join('');
 }
 
+// 2. FOOD TABLE
 function renderFoodTable() {
     const tbody = document.getElementById('foodTableBody');
     if (!tbody) return;
@@ -802,7 +811,7 @@ function renderFoodTable() {
         rows.map(r => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5 whitespace-nowrap"><span class="font-bold text-amber-600 block">${r.mealType || 'Meal'}</span><span class="text-[10px] text-slate-400 block">${r.time} • ${r.date}</span></td>
-                <td class="p-2.5 font-bold">${r.caterer}<span class="text-[10px] text-slate-400 block">${formatLocationLink(r.place)}</span></td>
+                <td class="p-2.5 font-bold">${r.caterer}<span class="text-[10px] text-slate-400 block">${formatLocationLink(r.place, r.mapLink)}</span></td>
                 <td class="p-2.5">
                     <div class="text-[11px] bg-amber-50/70 dark:bg-amber-950/40 p-1.5 rounded-lg border leading-tight">${(r.menu || 'Menu TBD').replace(/\n/g, '<br>')}</div>
                     ${r.notes ? `<span class="text-[10px] text-slate-500 italic block mt-0.5">${r.notes}</span>` : ''}
@@ -818,6 +827,7 @@ function renderFoodTable() {
         `).join('');
 }
 
+// 3. ROOMS TABLE
 function renderRoomsTable() {
     const tbody = document.getElementById('roomsTableBody');
     if (!tbody) return;
@@ -835,7 +845,7 @@ function renderRoomsTable() {
                     ${r.name}
                     ${r.notes ? `<span class="text-[10px] text-slate-500 italic block font-normal">${r.notes}</span>` : ''}
                 </td>
-                <td class="p-2.5">${formatLocationLink(r.location)}</td>
+                <td class="p-2.5">${formatLocationLink(r.location, r.mapLink)}</td>
                 <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">${highlightPhoneNumbers(r.details)}</td>
                 <td class="p-2.5 text-[11px] font-semibold text-amber-600">${r.timing}</td>
                 <td class="p-2.5 text-slate-700 dark:text-slate-300">${r.bookedBy}</td>
@@ -848,6 +858,7 @@ function renderRoomsTable() {
         `).join('');
 }
 
+// 4. VEHICLES TABLE
 function renderVehiclesTable() {
     const tbody = document.getElementById('vehiclesTableBody');
     if (!tbody) return;
@@ -866,7 +877,7 @@ function renderVehiclesTable() {
                     <div class="font-semibold">${r.contactPerson}</div>
                     <div class="text-[10px]">${highlightPhoneNumbers(r.phone)}</div>
                 </td>
-                <td class="p-2.5">${formatLocationLink(r.location)}</td>
+                <td class="p-2.5">${formatLocationLink(r.location, r.mapLink)}</td>
                 <td class="p-2.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-400">${r.rate}</td>
                 <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">
                     <div>${r.timing}</div>
@@ -881,6 +892,7 @@ function renderVehiclesTable() {
         `).join('');
 }
 
+// 5. POOJA LIST
 function renderShoppingTable() {
     const tbody = document.getElementById('shoppingTableBody');
     if (!tbody) return;
@@ -892,7 +904,9 @@ function renderShoppingTable() {
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
                 <td class="p-2.5"><span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">${r.category}</span></td>
                 <td class="p-2.5 font-semibold text-slate-800 dark:text-slate-100">${r.title}</td>
-                <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">${r.notes || '—'}</td>
+                <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">
+                    ${r.notes ? `<span class="text-amber-600 dark:text-amber-400">${r.notes}</span>` : '—'}
+                </td>
                 <td class="p-2.5 text-slate-700 dark:text-slate-300">${r.person}</td>
                 <td class="p-2.5">${getStatusBadge(r.status, r.id, 'shopping')}</td>
                 <td class="p-2.5 text-right whitespace-nowrap">
@@ -903,6 +917,7 @@ function renderShoppingTable() {
         `).join('');
 }
 
+// 6. TO-DO
 function renderTodoTable() {
     const tbody = document.getElementById('todoTableBody');
     if (!tbody) return;
@@ -914,7 +929,10 @@ function renderTodoTable() {
     tbody.innerHTML = rows.length === 0 ? `<tr><td colspan="6" class="p-4 text-center text-slate-400">No to-do tasks found.</td></tr>` :
         rows.map(r => `
             <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
-                <td class="p-2.5 font-semibold text-slate-800 dark:text-slate-100">${r.title}</td>
+                <td class="p-2.5 font-semibold text-slate-800 dark:text-slate-100">
+                    ${r.title}
+                    ${r.notes ? `<span class="text-[10px] text-slate-500 italic block mt-0.5"><i class="fa-regular fa-note-sticky text-amber-500 mr-1 text-[8px]"></i>${r.notes}</span>` : ''}
+                </td>
                 <td class="p-2.5 text-[10px] text-slate-500 font-bold">${r.date || r.time}</td>
                 <td class="p-2.5 text-[11px] text-slate-500 italic">${r.notes || '—'}</td>
                 <td class="p-2.5 text-slate-700 dark:text-slate-300">${r.person}</td>
@@ -927,6 +945,7 @@ function renderTodoTable() {
         `).join('');
 }
 
+// 7. CONTACTS
 function renderContactsTable() {
     const tbody = document.getElementById('contactsTableBody');
     if (!tbody) return;
@@ -943,7 +962,7 @@ function renderContactsTable() {
                 <td class="p-2.5"><span class="px-2 py-0.5 text-[10px] font-bold rounded-lg ${c.category.includes('Hotel') ? 'bg-blue-100 text-blue-800' : c.category.includes('Driver') ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${c.category}</span></td>
                 <td class="p-2.5 font-bold text-slate-800 dark:text-slate-100">${c.name}</td>
                 <td class="p-2.5 font-semibold text-emerald-600 text-xs">${highlightPhoneNumbers(c.phone)}</td>
-                <td class="p-2.5">${formatLocationLink(c.location)}</td>
+                <td class="p-2.5">${formatLocationLink(c.location, c.mapLink)}</td>
                 <td class="p-2.5 text-[11px] text-slate-600 dark:text-slate-300">
                     <div>${c.service}</div>
                     ${c.notes ? `<div class="text-[10px] text-slate-400 italic">${c.notes}</div>` : ''}
@@ -967,7 +986,8 @@ function renderDayOverview() {
             <div class="py-1.5 flex items-start justify-between gap-1">
                 <div>
                     <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block">${r.title}</span>
-                    <span class="text-[10px] text-amber-600 font-semibold block">${r.time} • ${formatLocationLink(r.location)}</span>
+                    <span class="text-[10px] text-amber-600 font-semibold block">${r.time} • ${formatLocationLink(r.location, r.mapLink)}</span>
+                    ${r.notes ? `<span class="text-[10px] text-slate-500 italic block mt-0.5"><i class="fa-regular fa-note-sticky text-amber-500 mr-1 text-[8px]"></i>${r.notes}</span>` : ''}
                 </div>
                 <div>${getStatusBadge(r.status, r.id, 'schedule')}</div>
             </div>
@@ -986,6 +1006,7 @@ function renderDayOverview() {
                     <span class="text-xs font-bold text-amber-600 block">${mealDisplay}</span>
                     <span class="text-[10px] text-slate-700 dark:text-slate-300 font-medium block">${r.menu || 'Menu TBD'}</span>
                     <span class="text-[9px] text-slate-400">${r.caterer} • ${r.headcount}</span>
+                    ${r.notes ? `<div class="text-[10px] text-slate-500 italic mt-0.5">${r.notes}</div>` : ''}
                 </div>
                 <div>${getStatusBadge(r.status, r.id, 'food')}</div>
             </div>
@@ -1000,8 +1021,9 @@ function renderDayOverview() {
             <div class="py-1.5 flex items-start justify-between gap-1">
                 <div>
                     <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block">${r.name}</span>
-                    <span class="text-[10px] text-blue-600 font-semibold block">${highlightPhoneNumbers(r.phone)} • ${formatLocationLink(r.location)}</span>
+                    <span class="text-[10px] text-blue-600 font-semibold block">${highlightPhoneNumbers(r.phone)} • ${formatLocationLink(r.location, r.mapLink)}</span>
                     <span class="text-[9px] text-slate-400 block">${r.timing}</span>
+                    ${r.notes ? `<div class="text-[10px] text-slate-500 italic mt-0.5">${r.notes}</div>` : ''}
                 </div>
                 <div>${getStatusBadge(r.status, r.id, 'rooms')}</div>
             </div>
@@ -1018,6 +1040,7 @@ function renderDayOverview() {
                     <span class="text-xs font-bold text-slate-800 dark:text-slate-100 block">${v.name}</span>
                     <span class="text-[10px] text-emerald-600 font-semibold block">${highlightPhoneNumbers(v.phone)} • ${v.rate}</span>
                     <span class="text-[9px] text-slate-400 block">${v.timing}</span>
+                    ${v.notes ? `<div class="text-[10px] text-amber-600 italic mt-0.5">${v.notes}</div>` : ''}
                 </div>
                 <div>${getStatusBadge(v.status, v.id, 'vehicles')}</div>
             </div>
@@ -1033,6 +1056,7 @@ function renderDayOverview() {
                 <div>
                     <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 block">${r.title}</span>
                     <span class="text-[10px] text-slate-500">${r.time || r.date} • ${r.person}</span>
+                    ${r.notes ? `<div class="text-[10px] text-slate-500 italic mt-0.5">${r.notes}</div>` : ''}
                 </div>
                 <div>${getStatusBadge(r.status, r.id, 'todo')}</div>
             </div>
@@ -1083,9 +1107,7 @@ function renderCurrentTab() {
     else if (activeTab.startsWith('custom_')) renderCustomSectionTable(activeTab);
 }
 
-// =========================================================================
-// ✅ ADJUST FORM FIELDS (NOW WITH PROPER DAY DROPDOWN FOR CUSTOM TABS!)
-// =========================================================================
+// MODAL ADD / EDIT LOGIC
 function adjustFormFieldsBySection() {
     const sec = document.getElementById('formSection').value;
     const lblTitle = document.getElementById('lblTitle');
@@ -1104,7 +1126,6 @@ function adjustFormFieldsBySection() {
     if (colStatus) colStatus.classList.remove('hidden');
 
     if (sec.startsWith('custom_')) {
-        // ✅ CUSTOM TAB NOW HAS THE PROPER DAY SELECTION DROPDOWN!
         const customSecObj = customSections.find(s => s.id === sec);
         lblTitle.innerText = `${customSecObj ? customSecObj.name : 'Item'} Title / Activity`;
         lblDateOrCat.innerText = 'Event Day';
@@ -1118,7 +1139,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Time / Specifics / Rate';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
-        document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Location Name';
         document.getElementById('lblTransport').innerText = 'Category / Sub-Tag';
         lblPerson.innerText = 'In-Charge Person & Phone';
     } else if (sec === 'contacts') {
@@ -1137,7 +1158,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Service Details / Purpose';
         colLoc.classList.remove('hidden');
         colTrans.classList.add('hidden');
-        document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Location Name';
         lblPerson.innerText = 'Phone Number (e.g. 98401 22334)';
         if (colStatus) colStatus.classList.add('hidden');
     } else if (sec === 'food') {
@@ -1153,7 +1174,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Meal Type & Time (e.g. Lunch • 12:00 PM)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
-        document.getElementById('lblLocation').innerText = 'Place / Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Place / Location Name';
         document.getElementById('lblTransport').innerText = 'Headcount (e.g. 40 Max)';
         lblPerson.innerText = 'Booked By / Contact';
     } else if (sec === 'rooms') {
@@ -1168,7 +1189,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Room Tariff & Details (e.g. ₹2200+GST)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
-        document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Location Name';
         document.getElementById('lblTransport').innerText = 'Check-in to Check-out Dates';
         lblPerson.innerText = 'Hotel Phone Number';
     } else if (sec === 'vehicles') {
@@ -1184,7 +1205,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Rent & Rate (e.g. ₹3000/day + ₹13/KM)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
-        document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Location Name';
         document.getElementById('lblTransport').innerText = 'Booking Dates & Timings';
         lblPerson.innerText = 'Driver Contact Phone';
     } else if (sec === 'schedule') {
@@ -1199,7 +1220,7 @@ function adjustFormFieldsBySection() {
         lblTime.innerText = 'Time Slot (e.g. 05:30 AM – 06:30 AM)';
         colLoc.classList.remove('hidden');
         colTrans.classList.remove('hidden');
-        document.getElementById('lblLocation').innerText = 'Location (Google Maps)';
+        document.getElementById('lblLocation').innerText = 'Location Name';
         document.getElementById('lblTransport').innerText = 'Transport Mode';
         lblPerson.innerText = 'In-Charge Person';
     } else if (sec === 'shopping') {
@@ -1212,7 +1233,7 @@ function adjustFormFieldsBySection() {
                 <option value="Pooja Kit">Pooja Kit</option>
                 <option value="Gifts">Gifts / Thamboolam</option>
             </select>`;
-        lblTime.innerText = 'Quantity & Special Notes';
+        lblTime.innerText = 'Quantity & Specifics';
         colLoc.classList.add('hidden');
         colTrans.classList.add('hidden');
         lblPerson.innerText = 'Assigned Person';
@@ -1233,16 +1254,13 @@ function adjustFormFieldsBySection() {
     }
 }
 
-// =========================================================================
-// ✅ OPEN RECORD MODAL (LOCKS TO CURRENT TAB & DISPLAYS EXACT TARGET NAME)
-// =========================================================================
 function openRecordModal(sectionToPreselect) {
     document.getElementById('recordForm').reset();
     document.getElementById('formRecordId').value = '';
     if (document.getElementById('formMenu')) document.getElementById('formMenu').value = '';
     if (document.getElementById('formNotes')) document.getElementById('formNotes').value = '';
+    if (document.getElementById('formMapLink')) document.getElementById('formMapLink').value = '';
 
-    // Determine target section accurately (Never silently defaults to schedule)
     let target = sectionToPreselect;
     if (!target) {
         if (activeTab === 'dayview') {
@@ -1255,13 +1273,11 @@ function openRecordModal(sectionToPreselect) {
     const select = document.getElementById('formSection');
     if (select) {
         select.value = target;
-        // If option was not found, fallback safely to first custom or schedule
         if (select.value !== target) {
             select.value = target;
         }
     }
 
-    // Update modal title so you always see where the item is being added!
     const secNameMap = {
         'schedule': 'Event Agenda',
         'food': 'Food & Catering',
@@ -1294,16 +1310,35 @@ function editRecord(id, sec) {
     document.getElementById('formSection').value = sec;
     adjustFormFieldsBySection();
 
+    // 1. Title / Name
     document.getElementById('formTitle').value = item.title || item.name || item.caterer || '';
+    
+    // 2. Day / Category
     const dateEl = document.getElementById('formDate');
     if (dateEl) dateEl.value = item.date || item.category || 'Nov 20';
 
-    document.getElementById('formTimeOrDetails').value = item.mealType || item.time || item.details || item.rate || item.service || '';
-    if (document.getElementById('formLocation')) document.getElementById('formLocation').value = item.location || item.phone || item.place || '';
-    if (document.getElementById('formTransport')) document.getElementById('formTransport').value = item.transport || item.headcount || item.timing || '';
+    // 3. Time / Details / Service
+    document.getElementById('formTimeOrDetails').value = item.time || item.mealType || item.details || item.service || item.rate || '';
+    
+    // 4. Location (✅ FIXED: Never fallback to phone!)
+    if (document.getElementById('formLocation')) {
+        document.getElementById('formLocation').value = item.location || item.place || '';
+    }
+    
+    // 5. Transport / Headcount
+    if (document.getElementById('formTransport')) {
+        document.getElementById('formTransport').value = item.transport || item.headcount || item.timing || '';
+    }
+
+    // 6. Person / Phone (✅ FIXED: Handles both contacts & general items)
+    if (document.getElementById('formPerson')) {
+        document.getElementById('formPerson').value = item.phone || item.person || item.contactPerson || item.bookedBy || '';
+    }
+
+    // 7. Menu, Notes, MapLink & Status
     if (document.getElementById('formMenu')) document.getElementById('formMenu').value = item.menu || '';
     if (document.getElementById('formNotes')) document.getElementById('formNotes').value = item.notes || '';
-    if (document.getElementById('formPerson')) document.getElementById('formPerson').value = item.person || item.contactPerson || item.bookedBy || item.phone || '';
+    if (document.getElementById('formMapLink')) document.getElementById('formMapLink').value = item.mapLink || '';
     if (document.getElementById('formStatus')) document.getElementById('formStatus').value = item.status || 'Confirmed';
 }
 
@@ -1333,28 +1368,32 @@ function handleSaveRecord(e) {
     const dateOrCat = document.getElementById('formDate') ? document.getElementById('formDate').value : 'Nov 20';
     const timeOrDetails = document.getElementById('formTimeOrDetails').value.trim();
     const location = document.getElementById('formLocation') ? document.getElementById('formLocation').value.trim() : '';
+    const mapLink = document.getElementById('formMapLink') ? document.getElementById('formMapLink').value.trim() : '';
     const transport = document.getElementById('formTransport') ? document.getElementById('formTransport').value.trim() : '';
     const menu = document.getElementById('formMenu') ? document.getElementById('formMenu').value.trim() : '';
     const notes = document.getElementById('formNotes') ? document.getElementById('formNotes').value.trim() : '';
     const person = document.getElementById('formPerson') ? document.getElementById('formPerson').value.trim() : '';
     const status = document.getElementById('formStatus') ? document.getElementById('formStatus').value : 'Confirmed';
 
-    let newObj = { id, section: sec, notes, status };
+    let newObj = { id, section: sec, notes, status, mapLink };
 
-    if (sec.startsWith('custom_')) {
-        newObj.title = title;
-        newObj.date = dateOrCat; // Now correctly saves Nov 19, Nov 20, or Nov 21!
-        newObj.time = timeOrDetails;
-        newObj.location = location;
-        newObj.transport = transport;
-        newObj.person = person;
-    } else if (sec === 'contacts') {
+    if (sec === 'contacts') {
+        // ✅ Sets both name & title, phone & person so it saves on the 1st click
         newObj.name = title;
+        newObj.title = title;
         newObj.category = dateOrCat;
         newObj.service = timeOrDetails;
         newObj.location = location;
         newObj.phone = person;
+        newObj.person = person;
         newObj.status = 'Confirmed';
+    } else if (sec.startsWith('custom_')) {
+        newObj.title = title;
+        newObj.date = dateOrCat;
+        newObj.time = timeOrDetails;
+        newObj.location = location;
+        newObj.transport = transport;
+        newObj.person = person;
     } else if (sec === 'schedule') {
         newObj.title = title; newObj.date = dateOrCat; newObj.time = timeOrDetails;
         newObj.location = location; newObj.transport = transport; newObj.person = person;
